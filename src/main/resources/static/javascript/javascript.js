@@ -175,7 +175,7 @@ function loadUrl(){
 	 }); 
 	 
 	 
-// goal being sent over
+// goal being sent over to fix single entry bug
 // var applicationPolicies = [{
 // id:7,
 // packageName:"youtube",
@@ -200,7 +200,7 @@ function loadUrl(){
 	 $.map(unindexed_array, function(n, i){
 		 
 		 if(n['name'].startsWith("ap")){// old application policy values
-
+			
 		 }else if(n['name'] == "delegatedScopes"){
 			 delegatedScopes.push(n['value']);
 // }else if(n['name'] == "accessibleTrackIds"){
@@ -490,4 +490,5 @@ function removeFromStorage(packageName){
 	managedAppsArray = managedAppsArray.filter(x => x != packageName);
 	localStorage.setItem("managedApps", JSON.stringify(managedAppsArray));
 }
+
 

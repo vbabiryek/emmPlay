@@ -142,6 +142,9 @@
 																		<td><input type="text" class="form-control"
 																		id="ap-${applicationPolicy.getDefaultPermissionPolicy()}-defaultPermissionPolicy" name="ap-${applicationPolicy.getDefaultPermissionPolicy()}-defaultPermissionPolicy"
 																		value="${applicationPolicy.getDefaultPermissionPolicy()}"></td>
+																		<td>
+																		<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">Silently un-install</button>
+																		</td>
 																</tr>
 															</c:forEach>
 																<tr id="ap-new-row">
@@ -154,6 +157,9 @@
 																		<td><input type="text" class="form-control"
 																		id="newDefaultPermissionPolicy" name="ap-newDefaultPermissionPolicy"
 																		value=""></td>
+																		<td>
+																		<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">Silently un-install</button>
+																		</td>
 																</tr>
 														</tbody>
 													</table>

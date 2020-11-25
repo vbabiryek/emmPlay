@@ -358,6 +358,15 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 	
+	public void silentlyUninstall(String name) {
+		try {
+			androidManagementClient.enterprises().webApps().delete(name);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public AdvancedSecurityOverrides getAdvancedSecurityOverrides(Long id) {
 		Optional<AdvancedSecurityOverridesE> advancedSecurityOverrides = advancedSecurityOverridesRepo.findById(id);
@@ -466,21 +475,5 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 
-//	private List<ApplicationPolicy> getApplicationsPolicy(Long id) {
-//		Optional<ApplicationsPolicyE> applicationPolicy = applicationRepo.findById(id);
-//		ApplicationPolicy appPolicy = new ApplicationPolicy();
-//		List<ApplicationPolicy> appPolicyList = new ArrayList<>();
-//		if (applicationPolicy.isPresent() && applicationPolicy.get().getId() > 1) {
-//			ApplicationsPolicyE result = applicationPolicy.get();
-//			appPolicy.setPackageName(result.getPackageName());
-//			appPolicy.setInstallType(result.getInstallType());
-//			appPolicy.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy());
-//			appPolicy.setPermissionGrants(getPermissionGrants(id));
-//			appPolicy.setDisabled(result.getDisabled());
-//			appPolicyList.add(appPolicy);
-//			return appPolicyList;
-//		}
-//		return null;
-//	}
 
 }
