@@ -492,3 +492,14 @@ function removeFromStorage(packageName){
 }
 
 
+/* In case we ever want to explore this route
+
+function uninstall(){
+	$.get("/getSilentUninstall", function(){
+		$(document).on('click', 'button.deletebtn', function () {
+      	$(this).closest('tr').remove();
+      	return false;
+   		});
+	});
+}
+*/

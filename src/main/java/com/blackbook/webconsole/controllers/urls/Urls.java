@@ -18,6 +18,7 @@ public class Urls {
 	public static final String ADD_APPLICATION_POLICY = "/addApplicationPolicy";
 	public static final String ADD_APPLICATION_POLICIES = "/addApplicationPolicies";
 	public static final String GET_APPLICATION_POLICY = "/getApplicationPolicy";
+	//public static final String UNINSTALL_APP = "/getSilentUninstall"; in case we ever want to explore this route
 	
 	//devices RestAPI
 	public static final String GET_POLICY = "/getPolicy";

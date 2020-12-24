@@ -34,6 +34,7 @@ import com.blackbook.webconsole.repositories.SafeBootRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
+import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.androidenterprise.model.AdministratorWebToken;
@@ -120,6 +121,7 @@ public class EnterpriseService implements EnterpriseI {
 
 		InputStream is = new ByteArrayInputStream(str.getBytes());
 		GoogleCredential credential = null;
+		
 		try {
 			credential = GoogleCredential.fromStream(is).createScoped(Collections.singleton(OAUTH_SCOPE));
 		} catch (IOException e) {
@@ -221,8 +223,8 @@ public class EnterpriseService implements EnterpriseI {
 		List<String> categories = new ArrayList<>();
 		categories.add("android.intent.category.HOME");
 		categories.add("android.intent.category.DEFAULT");
-		Optional<ApplicationsPolicyE> applicationPolicy = applicationRepo.findById(1L);
-		ApplicationsPolicyE result = applicationPolicy.get();
+		Iterable<ApplicationsPolicyE> applicationPolicy = applicationRepo.findAll();
+		ApplicationsPolicyE result = applicationPolicy.iterator().next();
 		
 		return new Policy()
 				.setPermissionGrants(getPermissionGrants(1L))
@@ -297,6 +299,7 @@ public class EnterpriseService implements EnterpriseI {
 		return androidManagementClient.enterprises().devices().issueCommand(deviceName, command).execute();
 	}
 
+
 	@Override
 	public PasswordRequirements getPasswordRequirements(Long id) {
 		Optional<PasswordRequirementsE> passwordRequirement = passwordPolicyRepo.findById(id);
@@ -358,14 +361,14 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 	
-	public void silentlyUninstall(String name) {
-		try {
-			androidManagementClient.enterprises().webApps().delete(name);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+	/*In case we ever want to explore this route
+	 * 
+	 * public Policy silentlyUninstall() {
+		return new Policy().setApplications(Collections.singletonList(new ApplicationPolicy()
+				.setInstallType("BLOCKED")));
+				
+	}*/
 	
 	@Override
 	public AdvancedSecurityOverrides getAdvancedSecurityOverrides(Long id) {
@@ -443,15 +446,7 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 	
-	
 
-	// Is the only way to execute this to find a way to interact on the front end
-	// to toggle this feature with debuggingFeaturesAllowed set to true or false?
-//	private Boolean getUsbDebuggingPolicy(Long id) {
-//		Optional<UsbDebuggingE> usbDebuggingFeatures = usbdebuggingRepo.findById(id);
-//		debuggingFeaturesAllowed debugingAllowed = new Usb
-//		return null;
-//	}
 
 	private List<PolicyEnforcementRule> getPolicyEnforcementRules(Long id) {
 		Optional<PolicyEnforcementRulesE> policyEnforcementRules = policyEnforcementRulesRepo.findById(id);

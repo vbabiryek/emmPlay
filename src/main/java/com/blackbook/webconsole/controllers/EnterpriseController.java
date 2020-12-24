@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -229,7 +230,6 @@ public class EnterpriseController {
 	}
 	
 	
-	
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICY, consumes = {MediaType.ALL_VALUE})
 	public ApplicationsPolicyE addApplicationPolicy(@RequestBody ApplicationsPolicyE applicationsForm) {
 		Optional<ApplicationsPolicyE> foundApplicationsPolicy = applicationRepo.findById(applicationsForm.getId());
@@ -261,7 +261,7 @@ public class EnterpriseController {
 		}	
 	}
 	
-//	Find a way to iterate through this 
+//	Find a way to iterate through this - known bug *one application is sent at a time
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICIES, consumes = {MediaType.ALL_VALUE})
 	public List<ApplicationsPolicyE> addApplicationPolicies(@RequestBody List<ApplicationsPolicyE> applicationsForms) {
 		List<ApplicationsPolicyE> response = new ArrayList<>();
@@ -307,7 +307,6 @@ public class EnterpriseController {
 		applicationRepo.delete(applicationRepo.findById(id).get());
 	}
 
-	
 	@RequestMapping(value = Urls.GET_APPLICATION_POLICY, method = RequestMethod.GET)
 	public ApplicationsPolicyE getApplicationPolicy() {
 		return applicationRepo.findById(1L).isPresent() ? applicationRepo.findById(1L).get() : null;
@@ -344,6 +343,12 @@ public class EnterpriseController {
 		return null;
 		
 	}
+	
+//	In case we ever want to explore this route
+//	@RequestMapping(value = Urls.UNINSTALL_APP, method = RequestMethod.GET)
+//	public Policy silentlyUninstall() {
+//		return enterpriseImpl.silentlyUninstall();
+//	}
 	
 	@RequestMapping(value = Urls.LOCK_DEVICE, method = RequestMethod.GET)
 	public Operation lockDevice(@PathVariable String enterpriseId, @PathVariable String deviceName) {

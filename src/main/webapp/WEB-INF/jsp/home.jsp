@@ -143,7 +143,7 @@
 																		id="ap-${applicationPolicy.getDefaultPermissionPolicy()}-defaultPermissionPolicy" name="ap-${applicationPolicy.getDefaultPermissionPolicy()}-defaultPermissionPolicy"
 																		value="${applicationPolicy.getDefaultPermissionPolicy()}"></td>
 																		<td>
-																		<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">Silently un-install</button>
+																		<!-- <button type="button" class="deletebtn" onclick = "uninstall()" title="Remove row">Uninstall</button> -->
 																		</td>
 																</tr>
 															</c:forEach>
@@ -158,7 +158,7 @@
 																		id="newDefaultPermissionPolicy" name="ap-newDefaultPermissionPolicy"
 																		value=""></td>
 																		<td>
-																		<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">Silently un-install</button>
+																		<!-- <button type="button" class="deletebtn" onclick = "uninstall()" title="Remove row">Uninstall</button> -->
 																		</td>
 																</tr>
 														</tbody>
