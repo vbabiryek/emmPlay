@@ -29,6 +29,7 @@ import com.blackbook.webconsole.entities.PasswordRequirementsE;
 import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.entities.TemplateIdPolicyE;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
@@ -37,6 +38,7 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.PolicyRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
+import com.blackbook.webconsole.repositories.TemplateIdRepository;
 import com.blackbook.webconsole.services.EnterpriseI;
 import com.blackbook.webconsole.services.EnterpriseService;
 import com.google.api.services.androidmanagement.v1.AndroidManagement;
@@ -66,6 +68,8 @@ public class EnterpriseController {
 	public ApplicationRepository applicationRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
+	@Autowired
+	TemplateIdRepository tempRepo;
 	@Autowired
 	public PolicyRepository policyRepo;
 	private static final Logger LOG = LoggerFactory.getLogger(EnterpriseController.class);
@@ -229,6 +233,22 @@ public class EnterpriseController {
 		return appUpdateRepo.findById(1L).isPresent() ? appUpdateRepo.findById(1L).get() : null;
 	}
 	
+	@PostMapping(value = Urls.SET_TEMPLATE_ID, consumes = {MediaType.ALL_VALUE})
+	public TemplateIdPolicyE addTemplateIdPolicy(@RequestBody TemplateIdPolicyE templateIdForm) {
+		Optional<TemplateIdPolicyE> templateIds = tempRepo.findById(1L);
+		if(templateIds.isPresent()) {
+			TemplateIdPolicyE result = templateIds.get();
+			result.setTemplateId(templateIdForm.getTemplateId());
+			return tempRepo.save(result);
+		}
+		return tempRepo.save(templateIdForm);
+	}
+	
+	@RequestMapping(value = Urls.GET_TEMPLATE_ID, method = RequestMethod.GET)
+	public TemplateIdPolicyE getTemplateIdPolicy() {
+		return tempRepo.findById(1L).isPresent() ? tempRepo.findById(1L).get() : null;
+	}
+	
 	
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICY, consumes = {MediaType.ALL_VALUE})
 	public ApplicationsPolicyE addApplicationPolicy(@RequestBody ApplicationsPolicyE applicationsForm) {
@@ -277,6 +297,7 @@ public class EnterpriseController {
 			pol.setPermission(applicationsForm.getPermission());
 			pol.setPolicy(applicationsForm.getPolicy());
 			pol.setDisabled(applicationsForm.getDisabled());
+			pol.setTemplateId(applicationsForm.getTemplateId());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
 			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
@@ -308,8 +329,11 @@ public class EnterpriseController {
 	}
 
 	@RequestMapping(value = Urls.GET_APPLICATION_POLICY, method = RequestMethod.GET)
-	public ApplicationsPolicyE getApplicationPolicy() {
-		return applicationRepo.findById(1L).isPresent() ? applicationRepo.findById(1L).get() : null;
+	public ArrayList<ApplicationsPolicyE> getApplicationPolicy() {
+//		List<ApplicationsPolicyE> foundApplicationsPolicy = applicationRepo.findAll();
+		LOG.info("getting applications!");
+		return applicationRepo.findAll();
+//		return applicationRepo.findById(1L).isPresent() ? applicationRepo.findById(1L).get() : null;
 	}
 
 	@RequestMapping(value = Urls.GET_POLICY, method = RequestMethod.GET)

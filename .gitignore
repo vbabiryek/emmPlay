@@ -1,3 +1,5 @@
+sharkcred.json 
+*.war
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar

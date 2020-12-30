@@ -73,8 +73,8 @@
 						<ul class="dropdown-menu">
 							<li><a style="color: black"
 								onClick="createIframe()">Managed Play iFrame</a></li>
-							<li><a style="color: black"
-								onClick="createManagedConfigIframe()">Managed Configurations iFrame</a></li><!-- need to create -->
+							<!-- <li><a style="color: black"
+								onClick="createManagedConfigIframe()">Managed Configurations iFrame</a></li>need to create -->
 						</ul>
 					</div>
 				</div>
@@ -299,17 +299,18 @@
 												<hr>
 												<br> <label for="templateId">Template ID:</label> <input
 													type="text" class="form-control"
-													id="managedConfigurationTemplateId"
-													name="managedConfigurationTemplateId"> <br> <label
+													id="templateId"
+													value= "${applicationPolicyTemplateId}"
+													name="templateId"> <br> <label
 													for="configVariables">Configuration Variables</label>
 												<hr>
 												<label for="keyConfigVariable">Key:</label> <input
 													type="text" class="form-control"
-													id="managedKeyConfigVariables"
-													name="managedKeyConfigVariables"> <label
+													id="configurationVariables"
+													name="configurationVariables"> <label
 													for="valueConfigVariable">Value:</label> <input type="text"
-													class="form-control" id="managedValConfigVariables"
-													name="managedValConfigVariables">
+													class="form-control" id="configurationVariables"
+													name="configurationVariables">
 											</div>
 												
 

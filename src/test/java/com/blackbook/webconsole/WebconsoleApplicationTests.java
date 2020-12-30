@@ -1,13 +1,19 @@
 package com.blackbook.webconsole;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import static org.junit.Assert.assertEquals;
 
-@SpringBootTest
+import org.junit.Test;
+
 class WebconsoleApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
+	}
+	
+	@Test
+	void urlTesting() {
+		assertEquals(1,1);
 	}
 
 }

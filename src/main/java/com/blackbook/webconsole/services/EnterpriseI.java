@@ -6,9 +6,12 @@ import java.util.List;
 
 import com.blackbook.webconsole.entities.AdvancedSecurityOverridesE;
 import com.blackbook.webconsole.entities.AppAutoUpdatePolicyE;
+import com.blackbook.webconsole.entities.PolicyE;
+import com.blackbook.webconsole.entities.TemplateIdPolicyE;
 import com.google.api.services.androidmanagement.v1.model.AdvancedSecurityOverrides;
 import com.google.api.services.androidmanagement.v1.model.Device;
 import com.google.api.services.androidmanagement.v1.model.Enterprise;
+import com.google.api.services.androidmanagement.v1.model.ManagedConfigurationTemplate;
 import com.google.api.services.androidmanagement.v1.model.Operation;
 import com.google.api.services.androidmanagement.v1.model.PasswordRequirements;
 import com.google.api.services.androidmanagement.v1.model.PermissionGrant;
@@ -34,5 +37,6 @@ public interface EnterpriseI {
 	public AdvancedSecurityOverridesE getDebuggingOverride(Long id);
 	public AppAutoUpdatePolicyE getAppAutoUpdatePolicy(Long id);
 	public AdvancedSecurityOverridesE getSafeBootOverride(Long id);
+	public ManagedConfigurationTemplate getTemplateId(Long id);
 	
 }

@@ -57,6 +57,10 @@ public class PolicyE extends AuditModel {
 	@JoinColumn(name = "safe_boot_disabled", referencedColumnName = "id")
 	private AdvancedSecurityOverridesE safeBoot;
 	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "policyE")
+	@JoinColumn(name = "template_id", referencedColumnName = "id")
+	private TemplateIdPolicyE templateId;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "policyE")
 	private List<ApplicationsPolicyE> applicationPolicy;
 	

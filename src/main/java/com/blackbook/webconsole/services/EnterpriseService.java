@@ -11,20 +11,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.el.stream.Stream;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.blackbook.webconsole.entities.AdvancedSecurityOverridesE;
 import com.blackbook.webconsole.entities.AppAutoUpdatePolicyE;
 import com.blackbook.webconsole.entities.ApplicationsPolicyE;
 import com.blackbook.webconsole.entities.PasswordRequirementsE;
 import com.blackbook.webconsole.entities.PermissionPolicyE;
+import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.entities.TemplateIdPolicyE;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
 import com.blackbook.webconsole.repositories.DebuggingRepository;
 import com.blackbook.webconsole.repositories.PasswordRepository;
@@ -32,6 +36,7 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.SafeBootRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
+import com.blackbook.webconsole.repositories.TemplateIdRepository;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -51,6 +56,7 @@ import com.google.api.services.androidmanagement.v1.model.EnrollmentToken;
 import com.google.api.services.androidmanagement.v1.model.Enterprise;
 import com.google.api.services.androidmanagement.v1.model.FreezePeriod;
 import com.google.api.services.androidmanagement.v1.model.ListDevicesResponse;
+import com.google.api.services.androidmanagement.v1.model.ManagedConfigurationTemplate;
 import com.google.api.services.androidmanagement.v1.model.Operation;
 import com.google.api.services.androidmanagement.v1.model.PasswordRequirements;
 import com.google.api.services.androidmanagement.v1.model.PermissionGrant;
@@ -90,6 +96,8 @@ public class EnterpriseService implements EnterpriseI {
 	AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
+	@Autowired
+	TemplateIdRepository tempIdRepo;
 	@Autowired
 	DebuggingRepository debugRepo;
 	@Autowired
@@ -220,11 +228,27 @@ public class EnterpriseService implements EnterpriseI {
 	/** Here's where I set the stage to build my policy. */
 	@Override
 	public Policy getPolicy() {
+		
 		List<String> categories = new ArrayList<>();
 		categories.add("android.intent.category.HOME");
 		categories.add("android.intent.category.DEFAULT");
-		Iterable<ApplicationsPolicyE> applicationPolicy = applicationRepo.findAll();
-		ApplicationsPolicyE result = applicationPolicy.iterator().next();
+		List<ApplicationsPolicyE> applicationPolicy = applicationRepo.findAll();
+		
+		ArrayList<ApplicationPolicy> applications = new ArrayList<>();
+		
+		for(int i = 0; i < applicationPolicy.size(); i++) {
+			ApplicationsPolicyE result = applicationPolicy.get(i);
+			ApplicationPolicy appPolicy = new ApplicationPolicy()
+					.setPackageName(result.getPackageName())
+					.setInstallType(result.getInstallType())
+					.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
+					.setPermissionGrants(getPermissionGrants(1L))
+					.setManagedConfigurationTemplate(getTemplateId(1L))
+					.setDisabled(result.getDisabled());
+			applications.add(appPolicy);
+		}
+		
+		LOG.info("application size outside of loop are: " + applications.size());
 		
 		return new Policy()
 				.setPermissionGrants(getPermissionGrants(1L))
@@ -232,12 +256,7 @@ public class EnterpriseService implements EnterpriseI {
 				.setPasswordRequirements(getPasswordRequirements(1L))
 				.setAdvancedSecurityOverrides(getAdvancedSecurityOverrides(1L))
 				.setPolicyEnforcementRules(getPolicyEnforcementRules(1L))
-				.setApplications(Collections.singletonList(new ApplicationPolicy()
-						.setPackageName(result.getPackageName())
-						.setInstallType(result.getInstallType())
-						.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
-						.setPermissionGrants(getPermissionGrants(1L))
-						.setDisabled(result.getDisabled())))
+				.setApplications(applications)
 				.setSafeBootDisabled(getSafeBootOverride(1L) == null ? Boolean.FALSE : getSafeBootOverride(1L).getSafeBootDisabled())
 				.setDebuggingFeaturesAllowed(getDebuggingOverride(1L) == null ? Boolean.FALSE : getDebuggingOverride(1L).getDebuggingFeaturesAllowed());
 	}
@@ -257,8 +276,8 @@ public class EnterpriseService implements EnterpriseI {
 			Policy p = androidManagementClient.enterprises().policies().patch(name, policy).execute();
 			LOG.info("androidManagementClient in setPolicy() is: " + androidManagementClient);
 			LOG.info("Policy returned back from execute {} : ", p.toString());
-			LOG.info(
-					"getCosuPolicy()'s application policies here are: " + getPolicy().getApplications());
+//			LOG.info(
+//					"getCosuPolicy()'s application policies here are: " + getPolicy().);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			LOG.error(e.getMessage());
@@ -432,6 +451,18 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
+	
+	@Override
+	public ManagedConfigurationTemplate getTemplateId(Long id) {
+		Optional<TemplateIdPolicyE> templateIds = tempIdRepo.findById(1L);
+		ManagedConfigurationTemplate templateId = new ManagedConfigurationTemplate();
+		if(templateIds.isPresent()) {
+			TemplateIdPolicyE result = templateIds.get();
+			templateId.setTemplateId(result.getTemplateId());
+			return templateId;
+		}
+		return null;
+	}
 
 	@Override
 	public List<PermissionGrant> getPermissionGrants(Long id) {
@@ -469,6 +500,6 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-
-
+	
+	
 }

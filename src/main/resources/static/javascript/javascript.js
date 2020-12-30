@@ -113,6 +113,7 @@ function loadUrl(){
 	 var applications = [];
 	 var accessibleTrackIds = [];
 	 var unindexed_array = $(this).serializeArray();
+	 var templateId = $("#templateId").val();
 	
 	 $(".apRowTr").each(function(index){
 		 		var appTrackInfoObj = {};
@@ -322,7 +323,12 @@ function createIframe(){
 		    	    managedAppsArray = [... new Set(managedAppsArray)];//In case of duplicates, reset the array to be unique values only
 		    		localStorage.setItem("managedApps", JSON.stringify(managedAppsArray));//put it back into a string (JSON) and then back into localStorage.
 		    		populateTable(managedAppsArray);
+		    		
+		    		if(event.packageName == "com.google.android.gm"){
+		    			createManagedConfigIframe();
+		    		}
 		    	}
+		  
 
 		    	var htmlString = `<tr id="selected-app-row">
 																		<td><input type="text" class="form-control"
@@ -338,6 +344,7 @@ function createIframe(){
 
 function createManagedConfigIframe(){
 	$.get("/getManagedConfigToken", function(data){
+	console.log("data here is: ", JSON.stringify(data));
 		gapi.load('gapi.iframes', function() {
 		    var options = {
 		      'url': 'https://play.google.com/managed/mcm?token=' + data + '&packageName=com.google.android.gm',

@@ -20,6 +20,7 @@ import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.api.services.androidmanagement.v1.model.AppTrackInfo;
+import com.google.api.services.androidmanagement.v1.model.ApplicationPolicy;
 
 @Entity
 @Table(name = "Application_Policy")
@@ -43,6 +44,7 @@ public class ApplicationsPolicyE extends AuditModel{
 	private String policy;
 	private Boolean disabled;
 	private Integer minimumVersionCode;
+	private String templateId;
 
 	@ElementCollection
 	private List<String> delegatedScopes;
@@ -152,6 +154,14 @@ public class ApplicationsPolicyE extends AuditModel{
 
 	public void setPolicy(String policy) {
 		this.policy = policy;
+	}
+
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
 	}
 
 

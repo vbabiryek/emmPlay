@@ -65,6 +65,7 @@ public class HomeController {
 				homeModel.addObject("managedConfigurationMap", applicationPolicy.get(0).getManagedConfigurationMap());
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", applicationPolicy.get(0).getAccessibleTrackIds());
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
+				homeModel.addObject("applicationPolicyTemplateId", applicationPolicy.get(0).getTemplateId());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
 				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
 				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());
@@ -75,6 +76,7 @@ public class HomeController {
 				homeModel.addObject("applicationPolicyMinimumVersionCode", Integer.valueOf(-1));
 				homeModel.addObject("applicationPolicyPermission", "");
 				homeModel.addObject("applicationPolicyPermissionGrantsStates", "");
+				homeModel.addObject("applicationPolicyTemplateId", "");
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(new ArrayList<>()));
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", new ArrayList<>());
 			}
@@ -89,6 +91,7 @@ public class HomeController {
 	public String getEnterprise(@RequestParam String enterpriseToken) {
 		enterpriseImpl.getEnterpriseByToken(enterpriseToken);
 		return "redirect:/";
+		
 	}
 	
 	public String getDelegatedScopesHtml(List<String> delegatedScopes) {
