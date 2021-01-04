@@ -65,7 +65,7 @@ public class HomeController {
 				homeModel.addObject("managedConfigurationMap", applicationPolicy.get(0).getManagedConfigurationMap());
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", applicationPolicy.get(0).getAccessibleTrackIds());
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
-				homeModel.addObject("applicationPolicyTemplateId", applicationPolicy.get(0).getTemplateId());
+//				homeModel.addObject("applicationPolicyTemplateId", applicationPolicy.get(0).getTemplateId());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
 				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
 				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());

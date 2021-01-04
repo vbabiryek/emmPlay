@@ -222,38 +222,8 @@
 											<div class="form-group">
 												<label for="configurations">ManagedConfigurations:</label>
 												<hr>
-													<table class="table table-striped table-hover">
-														<thead>
-															<tr>
-																<th>Attribute</th>
-																<th>Value</th>
-															</tr>
-														</thead>
-														<tbody id="managedPropertyTable">
-															<c:forEach
-																items="${managedConfigurationMap}"
-																var="managed">
-																<tr> 
-																	<td><input type="text" class="form-control vk-key"
-																		onKeyUp="updateValuePair(this)"
-																		value="${managed.key}"></td>
-																	<td><input type="text" class="form-control vk-key-value" vk-key=""
-																		value="${managed.value}" style = "width:80%">
-																		<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">X</button>
-																		</td>
-																</tr>
-															</c:forEach>
-																<tr id="new-row">
-																	<td><input type="text" class="form-control"
-																		id="new-key" name="new-key"
-																		value=""></td>
-																	<td><input type="text" class="form-control"
-																		id="new-value" name="new-value"
-																		value=""></td>
-																</tr>
-														</tbody>
-													</table>
-													<button id="add-row" onclick="addRow(event)" type = "button" class="btn btn-success">Add Row</button>
+													<div id = "managedConfigurationTable"></div>
+													<!-- <button id="add-row" onclick="addRow(event)" type = "button" class="btn btn-success">Add Row</button> -->
 											</div>
 
 											<hr>

@@ -73,6 +73,7 @@ function loadUrl(){
 	 case "application":
 		 $("#myApplicationPolicyModal").modal("show");
 		 $("#selectedAppsTable").html(appDataRow);
+		 populateManagedConfigurationTable();
 		 break;
 	 case "app-update":
 		 $("#myAppAutoUpdateModal").modal("show");
@@ -313,20 +314,19 @@ function createIframe(){
 		    var iframe = gapi.iframes.getContext().openChild(options);
 		    iframe.register('onproductselect', function(event){
 		    	console.log("event from SELECT is: " + JSON.stringify(event));
-		    	let managedAppsArray = localStorage.getItem("managedApps") || [];//Does this exist inside the localStorage? If not start off with a blank array.
-		    	managedAppsArray = typeof managedAppsArray === 'string' ? JSON.parse(managedAppsArray) : []; //If we have found it, it will be a string, if not a sting, it's just an array...if it's a string we convert if back into an object and then use it.
+		    	
 		    	//1. We take the package name into localStorage as stringified array
 		    	//2. We ensure that when it's stored it's unique package names (values)
 
 		    	if(event.action == "selected"){
-		    	    managedAppsArray.push(event.packageName);
-		    	    managedAppsArray = [... new Set(managedAppsArray)];//In case of duplicates, reset the array to be unique values only
-		    		localStorage.setItem("managedApps", JSON.stringify(managedAppsArray));//put it back into a string (JSON) and then back into localStorage.
+		    		
+		    		let managedAppsArray = addToLocalStorageArray("managedApps", event.packageName);
 		    		populateTable(managedAppsArray);
 		    		
-		    		if(event.packageName == "com.google.android.gm"){
-		    			createManagedConfigIframe();
-		    		}
+		    		//if(searchWords("span", "This app offers managed configuration")){
+		    			createManagedConfigIframe(event.packageName);
+		    		//}
+		    		
 		    	}
 		  
 
@@ -342,19 +342,21 @@ function createIframe(){
 	});
 }
 
-function createManagedConfigIframe(){
+function createManagedConfigIframe(packageName){
 	$.get("/getManagedConfigToken", function(data){
 	console.log("data here is: ", JSON.stringify(data));
 		gapi.load('gapi.iframes', function() {
 		    var options = {
-		      'url': 'https://play.google.com/managed/mcm?token=' + data + '&packageName=com.google.android.gm',
+		      'url': 'https://play.google.com/managed/mcm?token=' + data + `&packageName=${packageName}`,
 		      'where': document.getElementById('container'),
-		      'attributes': { style: 'height:1000px', scrolling: 'yes'}
+		      'attributes': { style: 'height:1000px', scrolling: 'yes'},
+		      'canDelete': 'TRUE'
 		    }
 
 		    var iframe = gapi.iframes.getContext().openChild(options);
 		    iframe.register('onconfigupdated', function(event) {
 		    	  console.log(event);
+		    	  addToLocalStorageArray("mcmId", event);
 		    	  alert("Configuration saved!");
 		    	}, gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER);
 		    $("main_content").html(iframe);
@@ -405,7 +407,21 @@ $("#addMore").click(function(e) {
 	    $("#newPackageName").val("");
 	    $("#newInstallType").val("");
 	    $("#newDefaultPermissionPolicy").val("");
-	  });
+});
+
+function makeTable(header, rowData){
+	var headerRow = "<thead><tr>";
+	header = header.map(x => "<th>" + x + "</th>").join("").replace(",", "") + "</tr></thead>";
+	headerRow += header;
+	
+	var tableBody = "<tbody>"; // 2D array
+	rowData.forEach(row => { // now we're in the individual array
+		row = row.map(x => "<td>" + x + "</td>");
+		tableBody += `<tr>${row}</tr>`;//adds individual rows each time
+	});
+	 tableBody += "</tbody>";//appends the tbody
+	return `<table class="table table-striped"> ${headerRow} ${tableBody} </table>`;
+}
 
 
 function addRow(event){
@@ -479,7 +495,7 @@ function getRemoveButton(packageName){
 function populateTable(tableData){
 	appDataRow = "";
 	for (const element of tableData){
-		appDataRow += `<tr><td>${element}</td><td>Managed Configuration</td>${getRemoveButton(element)}</tr>`;
+		appDataRow += `<tr><td>${element}</td>${getRemoveButton(element)}</tr>`;
 	}
 	
 }
@@ -510,3 +526,38 @@ function uninstall(){
 	});
 }
 */
+
+function searchWords(htmlTag, searchWord){//Searches for this htmltag and matching text
+	$(htmlTag).each((index, element) => {
+		if($(element).text().search(searchWord) !== -1){ //Strict equality - Gets the text of every span tag
+			return true;
+		}
+	});
+	return false;
+}
+
+function addToLocalStorageArray(keyName, value){
+	let localStorageArray = localStorage.getItem(keyName) || [];
+	localStorageArray = typeof localStorageArray === 'string' ? JSON.parse(localStorageArray) : [];
+	localStorageArray.push(value);
+	localStorageArray = [... new Set(localStorageArray)];//removes duplicates
+	localStorage.setItem(keyName, JSON.stringify(localStorageArray));
+	return localStorageArray;
+
+}
+
+function populateManagedConfigurationTable(){
+	if(localStorage.getItem("mcmId")){
+		let data = localStorage.getItem("mcmId") || [];
+		data = typeof data === 'string' ? JSON.parse(data) : [];//because localStorage can only store String, this parses it from Strings into an object
+		if(data.length !== 0){
+			let header = Object.keys(data[0]);
+			let tableBody = [];
+			data.forEach(x => tableBody.push(Object.values(x))); //x = temp objects of each array
+			let table = makeTable(header, tableBody);
+			$("#managedConfigurationTable").html(table);
+		}
+		
+	}
+
+}

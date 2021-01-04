@@ -44,7 +44,6 @@ public class ApplicationsPolicyE extends AuditModel{
 	private String policy;
 	private Boolean disabled;
 	private Integer minimumVersionCode;
-	private String templateId;
 
 	@ElementCollection
 	private List<String> delegatedScopes;
@@ -155,16 +154,5 @@ public class ApplicationsPolicyE extends AuditModel{
 	public void setPolicy(String policy) {
 		this.policy = policy;
 	}
-
-	public String getTemplateId() {
-		return templateId;
-	}
-
-	public void setTemplateId(String templateId) {
-		this.templateId = templateId;
-	}
-
-
-
 	
 }

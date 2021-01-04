@@ -452,6 +452,9 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 	
+	//You need to add the Key/Values as well for the ManagedConfigurations template object to be completed
+	//Then this should take!
+	
 	@Override
 	public ManagedConfigurationTemplate getTemplateId(Long id) {
 		Optional<TemplateIdPolicyE> templateIds = tempIdRepo.findById(1L);

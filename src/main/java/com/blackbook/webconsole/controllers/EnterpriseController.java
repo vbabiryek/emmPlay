@@ -297,7 +297,7 @@ public class EnterpriseController {
 			pol.setPermission(applicationsForm.getPermission());
 			pol.setPolicy(applicationsForm.getPolicy());
 			pol.setDisabled(applicationsForm.getDisabled());
-			pol.setTemplateId(applicationsForm.getTemplateId());
+//			pol.setTemplateId(applicationsForm.getTemplateId());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
 			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
