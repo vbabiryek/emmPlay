@@ -109,12 +109,13 @@ function loadUrl(){
 	 	event.preventDefault();
 	 	var post_url = $(this).attr("action");
 	 var indexed_array = {};
-	 var managedConfigurationMap = {};// managedConfigurations object
+	 var managedConfigurationMap = {};// managedConfigurations object - not using as it doesn't seem to work this way - raise bug!
 	 var delegatedScopes = [];
 	 var applications = [];
 	 var accessibleTrackIds = [];
 	 var unindexed_array = $(this).serializeArray();
 	 var templateId = $("#templateId").val();
+	 var configurationVariables = {};
 	
 	 $(".apRowTr").each(function(index){
 		 		var appTrackInfoObj = {};
@@ -135,6 +136,23 @@ function loadUrl(){
 		 			});
 		 			accessibleTrackIds.push(appTrackInfoObj);
 	});
+	
+	/*
+	$(".apTemplateAndConfigRow").each(function(index){
+			var managedConfigTemplateObj = {};
+			var id = $(this).attr("managedConfigTemplateId");
+			if(id != undefined){
+				managedConfigTemplateObj.id = id;
+			}
+			
+			$(this).find("input").each(function(index){
+				managedConfigTemplateObj["templateId"] = $(this).val();
+				managedConfigTemplateObj["configurationVariables"] = $(this).val();
+			});
+			applications.push(managedConfigTemplateObj);
+			console.log("applications policy here is: " + applications);
+	});
+	*/
 
 	 $(".apRow").each(function(index){// Now we have every single value, one
 										// row at a time. "this" obtains every
@@ -177,28 +195,6 @@ function loadUrl(){
 	 }); 
 	 
 	 
-// goal being sent over to fix single entry bug
-// var applicationPolicies = [{
-// id:7,
-// packageName:"youtube",
-// disabled:true,
-// managedConfigurations:{
-// key1:value1,
-// key2:Value2
-// }
-//			 
-// },{
-// id:8,
-// packageName:"gmail",
-// disabled:true,
-// managedConfigurations:{
-// key1:value1,
-// key2:Value2
-// }
-//			 
-// }];
-	 
-	 
 	 $.map(unindexed_array, function(n, i){
 		 
 		 if(n['name'].startsWith("ap")){// old application policy values
@@ -221,8 +217,9 @@ function loadUrl(){
 
 	 
 	 for(var i = 0; i < applications.length; i++){
-		 applications[i].managedConfigurationMap = managedConfigurationMap;
+		 //applications[i].configurationVariables = configurationVariables;
 		 applications[i].delegatedScopes = delegatedScopes;
+		 //applications[i].templateId = templateId;
 		 applications[i].accessibleTrackIds = accessibleTrackIds;
 	 }
 	 
@@ -409,6 +406,21 @@ $("#addMore").click(function(e) {
 	    $("#newDefaultPermissionPolicy").val("");
 });
 
+$("#addMoreConfigs").click(function(e){
+	e.preventDefault();
+	var managedConfigVarKey = $("#newConfigurationVariablesKey").val();
+	var managedConfigVarVal = $("#newConfigurationVariablesVal").val();
+	
+	$("#ap-config-new-row").before(`<tr class="apConfigRow">
+											<td><input type="text" class="form-control" value="${managedConfigVarKey}"></td>
+											<td><input type="text" class="form-control" value="${managedConfigVarVal}"></td>
+											</tr>`);
+											
+		$("#newConfigurationVariablesKey").val("");		
+		$("#newConfigurationVariablesVal").val("");
+
+});
+
 function makeTable(header, rowData){
 	var headerRow = "<thead><tr>";
 	header = header.map(x => "<th>" + x + "</th>").join("").replace(",", "") + "</tr></thead>";
@@ -529,7 +541,7 @@ function uninstall(){
 
 function searchWords(htmlTag, searchWord){//Searches for this htmltag and matching text
 	$(htmlTag).each((index, element) => {
-		if($(element).text().search(searchWord) !== -1){ //Strict equality - Gets the text of every span tag
+		if($(element).text().search(searchWord) !== -1){ //persists the concept of strict equality - also gets the text of every span tag in the event I want to explore more for this route : )
 			return true;
 		}
 	});
@@ -549,7 +561,7 @@ function addToLocalStorageArray(keyName, value){
 function populateManagedConfigurationTable(){
 	if(localStorage.getItem("mcmId")){
 		let data = localStorage.getItem("mcmId") || [];
-		data = typeof data === 'string' ? JSON.parse(data) : [];//because localStorage can only store String, this parses it from Strings into an object
+		data = typeof data === 'string' ? JSON.parse(data) : [];//because localStorage can only store Strings, this parses it from Strings into an object
 		if(data.length !== 0){
 			let header = Object.keys(data[0]);
 			let tableBody = [];

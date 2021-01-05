@@ -44,6 +44,10 @@ public class ApplicationsPolicyE extends AuditModel{
 	private String policy;
 	private Boolean disabled;
 	private Integer minimumVersionCode;
+	private String templateId;
+	
+	@Convert(converter = HashMapConverter.class)
+	private Map<String, String> configurationVariables;
 
 	@ElementCollection
 	private List<String> delegatedScopes;
@@ -154,5 +158,22 @@ public class ApplicationsPolicyE extends AuditModel{
 	public void setPolicy(String policy) {
 		this.policy = policy;
 	}
+
+	public String getTemplateId() {
+		return templateId;
+	}
+
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+	
+	public Map<String, String> getConfigurationVariables() {
+		return configurationVariables;
+	}
+	public void setConfigurationVariables(Map<String, String> configurationVariables) {
+		this.configurationVariables = configurationVariables;
+	}
+
+	
 	
 }

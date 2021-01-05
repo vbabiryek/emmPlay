@@ -82,6 +82,7 @@ public class EnterpriseService implements EnterpriseI {
 	public static String ENROLLMENT_TOKEN;
 	private String POLICY_ID = "policyB";
 	private HashMap<String, String> hm = new HashMap<>();
+	private HashMap<String, String> managedConfigMap = new HashMap<>();
 	private static final Logger LOG = LoggerFactory.getLogger(EnterpriseService.class);
 	private List<Device> listOfDevices = new ArrayList<>();
 	@Autowired
@@ -235,6 +236,8 @@ public class EnterpriseService implements EnterpriseI {
 		List<ApplicationsPolicyE> applicationPolicy = applicationRepo.findAll();
 		
 		ArrayList<ApplicationPolicy> applications = new ArrayList<>();
+		//How to pass the localStorage variables to Android Management API?
+		//So right now, we do a copy/paste into our templateId textbox on the UI
 		
 		for(int i = 0; i < applicationPolicy.size(); i++) {
 			ApplicationsPolicyE result = applicationPolicy.get(i);
@@ -243,7 +246,8 @@ public class EnterpriseService implements EnterpriseI {
 					.setInstallType(result.getInstallType())
 					.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
 					.setPermissionGrants(getPermissionGrants(1L))
-					.setManagedConfigurationTemplate(getTemplateId(1L))
+					.setManagedConfiguration(result.getManagedConfigurationMap())
+					.setManagedConfigurationTemplate(getManagedConfigurationTemplate(1L))
 					.setDisabled(result.getDisabled());
 			applications.add(appPolicy);
 		}
@@ -452,19 +456,32 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 	
-	//You need to add the Key/Values as well for the ManagedConfigurations template object to be completed
-	//Then this should take!
 	
 	@Override
-	public ManagedConfigurationTemplate getTemplateId(Long id) {
-		Optional<TemplateIdPolicyE> templateIds = tempIdRepo.findById(1L);
-		ManagedConfigurationTemplate templateId = new ManagedConfigurationTemplate();
-		if(templateIds.isPresent()) {
-			TemplateIdPolicyE result = templateIds.get();
-			templateId.setTemplateId(result.getTemplateId());
-			return templateId;
+	public ManagedConfigurationTemplate getManagedConfigurationTemplate(Long id) {
+		Optional<ApplicationsPolicyE> templateConfigs = applicationRepo.findById(1L);
+		ManagedConfigurationTemplate templateConfig = new ManagedConfigurationTemplate();
+		if(templateConfigs.isPresent()) {
+			ApplicationsPolicyE result = templateConfigs.get();
+			templateConfig.setTemplateId(result.getTemplateId());
+			templateConfig.setConfigurationVariables(getConfigurationVariables());
+			return templateConfig;
 		}
 		return null;
+	}
+	
+	//Questions to think about when building this here:
+	//Will it just insert a new hashmap pair into our db?
+	//I need this to return the mapped values from getConfigurationVariables();
+	//Am I inserting into the database correctly for the hashmap values - K/V pair?
+	//because managedConfigurations route doesn't work - file bug!
+	//Are you building this correctly?
+	public HashMap<String, String> getConfigurationVariables(){
+		HashMap<String, String> configVariableMap = new HashMap<>();
+		Optional<ApplicationsPolicyE> configVariables = applicationRepo.findById(1L);
+		ApplicationsPolicyE result = configVariables.get();
+		configVariableMap.put(result.getConfigurationVariables().toString(), result.getConfigurationVariables().toString());
+		return configVariableMap;
 	}
 
 	@Override

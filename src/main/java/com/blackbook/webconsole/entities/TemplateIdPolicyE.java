@@ -24,6 +24,7 @@ public class TemplateIdPolicyE extends AuditModel{
 	private Long id;
 	
 	private String templateId;
+	private String configurationVariables;
 	
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY, optional = false) // bi-directional relationship
@@ -36,6 +37,14 @@ public class TemplateIdPolicyE extends AuditModel{
 
 	public void setTemplateId(String templateId) {
 		this.templateId = templateId;
+	}
+
+	public String getConfigurationVariables() {
+		return configurationVariables;
+	}
+
+	public void setConfigurationVariables(String configurationVariables) {
+		this.configurationVariables = configurationVariables;
 	}
 
 }

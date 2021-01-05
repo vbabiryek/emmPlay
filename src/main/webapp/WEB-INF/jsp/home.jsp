@@ -176,7 +176,6 @@
 														<thead>
 															<tr>
 																<th>PackageName</th>
-																<th>Managed Configurations?</th>
 																<th>Remove Application</th><!-- Might just need an onclick method to call applications.delete? -->
 															</tr>
 														</thead>
@@ -187,9 +186,9 @@
 																		<td><input type="text" class="form-control"
 																		id="ap-${applicationPolicy.getPackageName()}-packageName" name="ap-${applicationPolicy.getPackageName()}-packageName"
 																		value="${applicationPolicy.getPackageName()}" ></td>
-																		<td><input type="text" class="form-control"
+																		<%-- <td><input type="text" class="form-control"
 																		id="ap-${applicationPolicy.getManagedConfigurationMap()}-installType" name="ap-${applicationPolicy.getManagedConfigurationMap()}-managedConfiguration"
-																		value="${applicationPolicy.getManagedConfigurationMap()}"></td>
+																		value="${applicationPolicy.getManagedConfigurationMap()}"></td> --%>
 																		<td><button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">X</button></td>
 																</tr>
 															</c:forEach>
@@ -219,12 +218,49 @@
 
 
 											<!-- Managed Configuration input -->
+											
+											<%-- <div class="form-group">
+												<label for="configurations">ManagedConfigurations:</label>
+													<hr>
+													<table class="table table-striped table-hover">
+														<thead>
+															<tr>
+																<th>Attribute</th>
+																<th>Value</th>
+															</tr>
+														</thead>
+														<tbody id="managedPropertyTable">
+														<c:forEach
+															items="${managedConfigurationMap}"
+															var="managed">
+															<tr>
+															<td><input type="text" class="form-control vk-key"
+																onKeyUp="updateValuePair(this)"
+																value="${managed.key}"></td>
+															<td><input type="text" class="form-control vk-key-value" vk-key=""
+																value="${managed.value}" style = "width:80%">
+																<button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">X</button>
+															</td>
+															</tr>
+															</c:forEach>
+															<tr id="new-row">
+															<td><input type="text" class="form-control"
+																id="new-key" name="new-key"
+																value=""></td>
+															<td><input type="text" class="form-control"
+																id="new-value" name="new-value"
+																value=""></td>
+															</tr>
+														</tbody>
+													</table>
+															<button id="add-row" onclick="addRow(event)" type = "button" class="btn btn-success">Add Row</button>
+												</div> --%>
+											
 											<div class="form-group">
 												<label for="configurations">ManagedConfigurations:</label>
 												<hr>
 													<div id = "managedConfigurationTable"></div>
-													<!-- <button id="add-row" onclick="addRow(event)" type = "button" class="btn btn-success">Add Row</button> -->
-											</div>
+											</div> 
 
 											<hr>
 
@@ -265,24 +301,56 @@
 
 											<!-- Managed Configuration Template input -->
 											<div class="form-group">
-												<label for="templateForManagedConfig">ManagedConfigurationTemplate():</label>
+												<label for="configurations">Managed Configurations Template:</label>
 												<hr>
-												<br> <label for="templateId">Template ID:</label> <input
-													type="text" class="form-control"
-													id="templateId"
-													value= "${applicationPolicyTemplateId}"
-													name="templateId"> <br> <label
-													for="configVariables">Configuration Variables</label>
-												<hr>
-												<label for="keyConfigVariable">Key:</label> <input
-													type="text" class="form-control"
-													id="configurationVariables"
-													name="configurationVariables"> <label
-													for="valueConfigVariable">Value:</label> <input type="text"
-													class="form-control" id="configurationVariables"
-													name="configurationVariables">
-											</div>
-												
+													<table class="table" managedConfigTemplateId = "${applicationPolicy.getTemplateId()}">
+													
+														<thead>
+															<tr>
+															<th>Template ID</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr class="apTemplateAndConfigRow">
+																<td><input type="text" class="form-control vk-tempId"
+																	id="templateId" name="managedConfigTemplateId"
+																	value="${applicationPolicy.getTemplateId()}" ></td>
+															</tr>
+														</tbody>
+														
+														<thead>
+															<tr>
+																<th>Configuration Key</th>
+																<th>Configuration Value</th>
+															</tr>
+														</thead>
+														<tbody id="managedConfigTemplateTable">
+															<c:forEach items="${amanagedConfigurationTemplateVariables}" var="managedConfigTemplateVariables">
+																<tr class="apTemplateAndConfigRow">
+																		<td><input type="text" class="form-control vk-key"
+																		id="configurationVariables" name="configurationVariablesKey"
+																		value="${applicationPolicy.getConfigurationVariables()}"></td>
+																		<td><input type="text" class="form-control vk-val"
+																		id="configurationVariables" name="configurationVariablesVal"
+																		value="${applicationPolicy.getConfigurationVariables()}"></td>
+																</tr>
+															</c:forEach>
+																<tr id="ap-config-new-row">
+																		<!-- <td><input type="text" class="form-control"
+																		id="newTemplateId" name="ap-newTemplateId"
+																		value=""></td> -->
+																		<td><input type="text" class="form-control"
+																		id="newConfigurationVariablesKey" name="ap-newConfigurationVariablesKey"
+																		value=""></td>
+																		<td><input type="text" class="form-control"
+																		id="newConfigurationVariablesVal" name="ap-newConfigurationVariablesVal"
+																		value=""></td>
+																</tr>
+														</tbody>
+													</table>
+													<button id="addMoreConfigs">Add more configVariables!</button>
+											</div>							
+
 
 											<!-- Accessible Track Id input -->
 											<div class="form-group">

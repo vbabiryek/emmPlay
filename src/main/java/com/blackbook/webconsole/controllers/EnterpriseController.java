@@ -233,21 +233,23 @@ public class EnterpriseController {
 		return appUpdateRepo.findById(1L).isPresent() ? appUpdateRepo.findById(1L).get() : null;
 	}
 	
-	@PostMapping(value = Urls.SET_TEMPLATE_ID, consumes = {MediaType.ALL_VALUE})
-	public TemplateIdPolicyE addTemplateIdPolicy(@RequestBody TemplateIdPolicyE templateIdForm) {
-		Optional<TemplateIdPolicyE> templateIds = tempRepo.findById(1L);
-		if(templateIds.isPresent()) {
-			TemplateIdPolicyE result = templateIds.get();
-			result.setTemplateId(templateIdForm.getTemplateId());
-			return tempRepo.save(result);
-		}
-		return tempRepo.save(templateIdForm);
-	}
+// Leave this here in case you choose to go this route
 	
-	@RequestMapping(value = Urls.GET_TEMPLATE_ID, method = RequestMethod.GET)
-	public TemplateIdPolicyE getTemplateIdPolicy() {
-		return tempRepo.findById(1L).isPresent() ? tempRepo.findById(1L).get() : null;
-	}
+//	@PostMapping(value = Urls.SET_TEMPLATE_ID, consumes = {MediaType.ALL_VALUE})
+//	public TemplateIdPolicyE addTemplateIdPolicy(@RequestBody TemplateIdPolicyE templateIdForm) {
+//		Optional<TemplateIdPolicyE> templateIds = tempRepo.findById(1L);
+//		if(templateIds.isPresent()) {
+//			TemplateIdPolicyE result = templateIds.get();
+//			result.setTemplateId(templateIdForm.getTemplateId());
+//			return tempRepo.save(result);
+//		}
+//		return tempRepo.save(templateIdForm);
+//	}
+//	
+//	@RequestMapping(value = Urls.GET_TEMPLATE_ID, method = RequestMethod.GET)
+//	public TemplateIdPolicyE getTemplateIdPolicy() {
+//		return tempRepo.findById(1L).isPresent() ? tempRepo.findById(1L).get() : null;
+//	}
 	
 	
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICY, consumes = {MediaType.ALL_VALUE})
@@ -265,6 +267,8 @@ public class EnterpriseController {
 			pol.setDisabled(applicationsForm.getDisabled());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
 			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
+			pol.setTemplateId(applicationsForm.getTemplateId());
+			pol.setConfigurationVariables(applicationsForm.getConfigurationVariables());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
 			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
 			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
@@ -297,7 +301,8 @@ public class EnterpriseController {
 			pol.setPermission(applicationsForm.getPermission());
 			pol.setPolicy(applicationsForm.getPolicy());
 			pol.setDisabled(applicationsForm.getDisabled());
-//			pol.setTemplateId(applicationsForm.getTemplateId());
+			pol.setTemplateId(applicationsForm.getTemplateId());
+			pol.setConfigurationVariables(applicationsForm.getConfigurationVariables());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
 			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
