@@ -28,7 +28,6 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
-import com.blackbook.webconsole.entities.TemplateIdPolicyE;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
 import com.blackbook.webconsole.repositories.DebuggingRepository;
 import com.blackbook.webconsole.repositories.PasswordRepository;
@@ -36,7 +35,6 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.SafeBootRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
-import com.blackbook.webconsole.repositories.TemplateIdRepository;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -97,8 +95,7 @@ public class EnterpriseService implements EnterpriseI {
 	AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
-	@Autowired
-	TemplateIdRepository tempIdRepo;
+	
 	@Autowired
 	DebuggingRepository debugRepo;
 	@Autowired
@@ -480,7 +477,7 @@ public class EnterpriseService implements EnterpriseI {
 		HashMap<String, String> configVariableMap = new HashMap<>();
 		Optional<ApplicationsPolicyE> configVariables = applicationRepo.findById(1L);
 		ApplicationsPolicyE result = configVariables.get();
-		configVariableMap.put(result.getConfigurationVariables().toString(), result.getConfigurationVariables().toString());
+		configVariableMap.put(result.getConfigurationVariables().toString(), result.getConfigurationVariables().values().toString());
 		return configVariableMap;
 	}
 

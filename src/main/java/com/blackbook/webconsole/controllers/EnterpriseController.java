@@ -29,7 +29,7 @@ import com.blackbook.webconsole.entities.PasswordRequirementsE;
 import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
-import com.blackbook.webconsole.entities.TemplateIdPolicyE;
+import com.blackbook.webconsole.pojo.TemplatePolicy;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
@@ -38,7 +38,6 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.PolicyRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
-import com.blackbook.webconsole.repositories.TemplateIdRepository;
 import com.blackbook.webconsole.services.EnterpriseI;
 import com.blackbook.webconsole.services.EnterpriseService;
 import com.google.api.services.androidmanagement.v1.AndroidManagement;
@@ -68,8 +67,6 @@ public class EnterpriseController {
 	public ApplicationRepository applicationRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
-	@Autowired
-	TemplateIdRepository tempRepo;
 	@Autowired
 	public PolicyRepository policyRepo;
 	private static final Logger LOG = LoggerFactory.getLogger(EnterpriseController.class);

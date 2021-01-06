@@ -314,7 +314,7 @@
 															<tr class="apTemplateAndConfigRow">
 																<td><input type="text" class="form-control vk-tempId"
 																	id="templateId" name="managedConfigTemplateId"
-																	value="${applicationPolicy.getTemplateId()}" ></td>
+																	value="${applicationPolicyTemplateId}" ></td>
 															</tr>
 														</tbody>
 														
@@ -325,14 +325,14 @@
 															</tr>
 														</thead>
 														<tbody id="managedConfigTemplateTable">
-															<c:forEach items="${amanagedConfigurationTemplateVariables}" var="managedConfigTemplateVariables">
+															<c:forEach items="${managedConfigurationTemplateVariables}" var="managedConfigTemplateVariables">
 																<tr class="apTemplateAndConfigRow">
 																		<td><input type="text" class="form-control vk-key"
 																		id="configurationVariables" name="configurationVariablesKey"
-																		value="${applicationPolicy.getConfigurationVariables()}"></td>
+																		value="${applicationPolicyManagedConfigVariable}"></td>
 																		<td><input type="text" class="form-control vk-val"
 																		id="configurationVariables" name="configurationVariablesVal"
-																		value="${applicationPolicy.getConfigurationVariables()}"></td>
+																		value="${applicationPolicyManagedConfigVariable}"></td>
 																</tr>
 															</c:forEach>
 																<tr id="ap-config-new-row">
