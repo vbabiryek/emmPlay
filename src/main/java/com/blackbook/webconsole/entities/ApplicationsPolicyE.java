@@ -15,12 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.lang.NonNull;
 
+import com.blackbook.webconsole.pojo.TemplatePolicy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.api.services.androidmanagement.v1.model.AppTrackInfo;
-import com.google.api.services.androidmanagement.v1.model.ApplicationPolicy;
 
 @Entity
 @Table(name = "Application_Policy")
@@ -44,7 +44,9 @@ public class ApplicationsPolicyE extends AuditModel{
 	private String policy;
 	private Boolean disabled;
 	private Integer minimumVersionCode;
-	private String templateId;
+	
+	@Transient
+	private TemplatePolicy templatePolicy;
 	
 	@Convert(converter = HashMapConverter.class)
 	private Map<String, String> configurationVariables;
@@ -159,19 +161,20 @@ public class ApplicationsPolicyE extends AuditModel{
 		this.policy = policy;
 	}
 
-	public String getTemplateId() {
-		return templateId;
-	}
-
-	public void setTemplateId(String templateId) {
-		this.templateId = templateId;
-	}
 	
 	public Map<String, String> getConfigurationVariables() {
 		return configurationVariables;
 	}
 	public void setConfigurationVariables(Map<String, String> configurationVariables) {
 		this.configurationVariables = configurationVariables;
+	}
+
+	public TemplatePolicy getTemplatePolicy() {
+		return templatePolicy;
+	}
+
+	public void setTemplatePolicy(TemplatePolicy templatePolicy) {
+		this.templatePolicy = templatePolicy;
 	}
 
 	

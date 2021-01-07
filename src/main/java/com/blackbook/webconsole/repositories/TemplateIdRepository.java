@@ -18,5 +18,6 @@ public interface TemplateIdRepository {
     
     List<TemplatePolicy> findAll();
     
-    Optional<TemplatePolicy> findByTemplateId(Long templateId);
+    Optional<TemplatePolicy> findByTemplateId(Long templateId);// serves as the select by template id
+    
 }

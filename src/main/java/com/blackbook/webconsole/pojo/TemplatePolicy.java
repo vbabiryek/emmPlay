@@ -17,6 +17,12 @@ public class TemplatePolicy implements Serializable{
 	private String templateId;
 	private Map<String, String> configurationVariables;
 	
+	public TemplatePolicy(Long id, Long applicationPolicyId, String templateId) {
+		this.id = id;
+		this.applicationPolicyId = applicationPolicyId;
+		this.templateId = templateId;
+	}
+	
 
 	public String getTemplateId() {
 		return templateId;
