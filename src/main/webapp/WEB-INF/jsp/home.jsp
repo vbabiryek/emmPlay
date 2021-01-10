@@ -301,22 +301,12 @@
 
 											<!-- Managed Configuration Template input -->
 											<div class="form-group">
-												<label for="configurations">Managed Configurations Template:</label>
+												<label for="configurations">Managed Configuration Template:</label>
 												<hr>
-													<table class="table" managedConfigTemplateId = "${applicationPolicy.getTemplateId()}">
-													
-														<thead>
-															<tr>
-															<th>Template ID</th>
-															</tr>
-														</thead>
-														<tbody>
-															<tr class="apTemplateAndConfigRow">
-																<td><input type="text" class="form-control vk-tempId"
+												<h4>Template ID : <input type="text" class="form-control vk-tempId"
 																	id="templateId" name="managedConfigTemplateId"
-																	value="${applicationPolicyTemplateId}" ></td>
-															</tr>
-														</tbody>
+																	value="${applicationPolicyTemplateId}" ></h4>
+													<table class="table">
 														
 														<thead>
 															<tr>

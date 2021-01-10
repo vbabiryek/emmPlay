@@ -32,17 +32,17 @@ public class TemplateIdJdbc implements TemplateIdRepository{
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	@Override
-	public int count() {
+	public Long count() {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1L;
 	}
 
 	@Override
-	public int save(TemplatePolicy templatePolicy) {
-		// TODO Auto-generated method stub
+	public Long save(TemplatePolicy templatePolicy) {
 		KeyHolder keyholder = new GeneratedKeyHolder();
-		
-		namedParameterJdbcTemplate.update(INSERT_TEMPLATE_ID, new BeanPropertySqlParameterSource(templatePolicy), keyholder);
+		templatePolicy.setApplicationPolicyId(1L);
+;		namedParameterJdbcTemplate.update(INSERT_TEMPLATE_ID, new MapSqlParameterSource("application_policy_id", templatePolicy.getApplicationPolicyId())
+		.addValue("template_id",  templatePolicy.getTemplateId()), keyholder);
 		for(Map.Entry<String, String> mapVal : templatePolicy.getConfigurationVariables().entrySet()) {
 			namedParameterJdbcTemplate.update(INSERT_CONFIGURATION_VARIABLES, 
 					new MapSqlParameterSource("template_id", templatePolicy.getTemplateId())
@@ -51,25 +51,25 @@ public class TemplateIdJdbc implements TemplateIdRepository{
 		}
 //				new MapSqlParameterSource("template_id", templatePolicy.getTemplateId())
 //				.addValue("application_policy_id", templatePolicy.getApplicationPolicyId()));
-		return (int) keyholder.getKey();
+		return (Long) keyholder.getKey();
 	}
 
 	@Override
-	public int update(TemplatePolicy templatePolicy) {
+	public Long update(TemplatePolicy templatePolicy) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1L;
 	}
 
 	@Override
-	public int deleteByTemplateId(Long templateId) {
+	public Long deleteByTemplateId(Long templateId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1L;
 	}
 
 	@Override
-	public int deleteAllConfigVariablesByTemplateId(Long templateId) {
+	public Long deleteAllConfigVariablesByTemplateId(Long templateId) {
 		// TODO Auto-generated method stub
-		return 0;
+		return 1L;
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class TemplateIdJdbc implements TemplateIdRepository{
                         rs.getString("template_id")
                 )));
 		
-		namedParameterJdbcTemplate.query(SELECT_CONFIGURATION_VARIABLES_BY_TEMPLATE_ID, (ResultSet resultSet) -> { //callback returns after execution of query
+		namedParameterJdbcTemplate.query(SELECT_CONFIGURATION_VARIABLES_BY_TEMPLATE_ID, (ResultSet resultSet) -> { //callback that returns after execution of query
 			Map<String, String> resultMap = new HashMap<>(); //Many rows
 			while(resultSet.next()) {
 				resultMap.put(resultSet.getString("configuration_key"), resultSet.getString("configuration_val"));

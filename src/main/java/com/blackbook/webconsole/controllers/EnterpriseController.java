@@ -253,36 +253,36 @@ public class EnterpriseController {
 //	}
 	
 	
-	@PostMapping(value = Urls.ADD_APPLICATION_POLICY, consumes = {MediaType.ALL_VALUE})
-	public ApplicationsPolicyE addApplicationPolicy(@RequestBody ApplicationsPolicyE applicationsForm) {
-		Optional<ApplicationsPolicyE> foundApplicationsPolicy = applicationRepo.findById(applicationsForm.getId());
-		if(foundApplicationsPolicy.isPresent()) {
-			//if found in database, get it and then update it
-			ApplicationsPolicyE pol = foundApplicationsPolicy.get();
-			pol.setPolicyE(policyRepo.findById(1L).get());//automatically gets the parent and sets the parent here
-			pol.setPackageName(applicationsForm.getPackageName());
-			pol.setInstallType(applicationsForm.getInstallType());
-			pol.setDefaultPermissionPolicy(applicationsForm.getDefaultPermissionPolicy());
-			pol.setPermission(applicationsForm.getPermission());
-			pol.setPolicy(applicationsForm.getPolicy());
-			pol.setDisabled(applicationsForm.getDisabled());
-			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
-			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
-			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
-			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
-			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
-				x.setApplicationPolicy(pol);
-				return x;
-			}).collect(Collectors.toList());
-			pol.setAccessibleTrackIds(accessibleTrackIds);
-			return applicationRepo.save(pol);
-		}else {
-			//add a new applications object
-			applicationsForm.setPolicyE(policyRepo.findById(1L).get());
-			return applicationRepo.save(applicationsForm);
-			//this takes the data, tells it who the parent is and saves it in the repo
-		}	
-	}
+//	@PostMapping(value = Urls.ADD_APPLICATION_POLICY, consumes = {MediaType.ALL_VALUE})
+//	public ApplicationsPolicyE addApplicationPolicy(@RequestBody ApplicationsPolicyE applicationsForm) {
+//		Optional<ApplicationsPolicyE> foundApplicationsPolicy = applicationRepo.findById(applicationsForm.getId());
+//		if(foundApplicationsPolicy.isPresent()) {
+//			//if found in database, get it and then update it
+//			ApplicationsPolicyE pol = foundApplicationsPolicy.get();
+//			pol.setPolicyE(policyRepo.findById(1L).get());//automatically gets the parent and sets the parent here
+//			pol.setPackageName(applicationsForm.getPackageName());
+//			pol.setInstallType(applicationsForm.getInstallType());
+//			pol.setDefaultPermissionPolicy(applicationsForm.getDefaultPermissionPolicy());
+//			pol.setPermission(applicationsForm.getPermission());
+//			pol.setPolicy(applicationsForm.getPolicy());
+//			pol.setDisabled(applicationsForm.getDisabled());
+//			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
+//			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
+//			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
+//			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
+//			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
+//				x.setApplicationPolicy(pol);
+//				return x;
+//			}).collect(Collectors.toList());
+//			pol.setAccessibleTrackIds(accessibleTrackIds);
+//			return applicationRepo.save(pol);
+//		}else {
+//			//add a new applications object
+//			applicationsForm.setPolicyE(policyRepo.findById(1L).get());
+//			return applicationRepo.save(applicationsForm);
+//			//this takes the data, tells it who the parent is and saves it in the repo
+//		}	
+//	}
 	
 //	Find a way to iterate through this - known bug *one application is sent at a time
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICIES, consumes = {MediaType.ALL_VALUE})
@@ -303,9 +303,7 @@ public class EnterpriseController {
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
 			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
-			//saving via jdbc not jpa, saving must occur in this manner!
-			applicationsForm.getTemplatePolicy().setId(1L);//always be for the very first row
-			templateIdRepository.save(applicationsForm.getTemplatePolicy());
+			
 			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
 			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
 				x.setApplicationPolicy(pol);
@@ -313,8 +311,13 @@ public class EnterpriseController {
 			}).collect(Collectors.toList());
 			pol.setAccessibleTrackIds(accessibleTrackIds);
 			response.add(applicationRepo.save(pol));
+			//saving via jdbc not jpa, saving must occur just like this!
+			//application policy id is an external id that is supplied outside of this class so it must be set here because it is not generated
+			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
+			templateIdRepository.save(applicationsForm.getTemplatePolicy());
 		}else {
 			//add a new applications object
+			
 			applicationsForm.setPolicyE(policyRepo.findById(1L).get());
 			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
 			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
@@ -324,6 +327,9 @@ public class EnterpriseController {
 			applicationsForm.setAccessibleTrackIds(accessibleTrackIds);
 			response.add(applicationRepo.save(applicationsForm));
 			//this takes the data, tells it who the parent is and saves it in the repo
+			//saving via jdbc not jpa, saving must occur just like this!
+			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
+			templateIdRepository.save(applicationsForm.getTemplatePolicy());
 		}
 		}
 		return response;

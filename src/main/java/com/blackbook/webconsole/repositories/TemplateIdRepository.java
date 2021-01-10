@@ -6,15 +6,15 @@ import java.util.Optional;
 import com.blackbook.webconsole.pojo.TemplatePolicy;
 
 public interface TemplateIdRepository {
-	int count();
+	Long count();
 
-    int save(TemplatePolicy templatePolicy);
+    Long save(TemplatePolicy templatePolicy);
 
-    int update(TemplatePolicy templatePolicy);
+    Long update(TemplatePolicy templatePolicy);
 
-    int deleteByTemplateId(Long templateId);
+    Long deleteByTemplateId(Long templateId);
     
-    int deleteAllConfigVariablesByTemplateId(Long templateId); // This because we need to delete the children first.
+    Long deleteAllConfigVariablesByTemplateId(Long templateId); // This because we need to delete the children first.
     
     List<TemplatePolicy> findAll();
     

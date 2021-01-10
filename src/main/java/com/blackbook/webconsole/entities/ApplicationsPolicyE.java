@@ -48,8 +48,6 @@ public class ApplicationsPolicyE extends AuditModel{
 	@Transient
 	private TemplatePolicy templatePolicy;
 	
-	@Convert(converter = HashMapConverter.class)
-	private Map<String, String> configurationVariables;
 
 	@ElementCollection
 	private List<String> delegatedScopes;
@@ -161,13 +159,6 @@ public class ApplicationsPolicyE extends AuditModel{
 		this.policy = policy;
 	}
 
-	
-	public Map<String, String> getConfigurationVariables() {
-		return configurationVariables;
-	}
-	public void setConfigurationVariables(Map<String, String> configurationVariables) {
-		this.configurationVariables = configurationVariables;
-	}
 
 	public TemplatePolicy getTemplatePolicy() {
 		return templatePolicy;
