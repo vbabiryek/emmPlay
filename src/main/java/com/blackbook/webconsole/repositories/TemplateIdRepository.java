@@ -12,7 +12,7 @@ public interface TemplateIdRepository {
 
     Long update(TemplatePolicy templatePolicy);
 
-    Long deleteByTemplateId(Long templateId);
+    void deleteByTemplateId(String templateId);
     
     Long deleteAllConfigVariablesByTemplateId(Long templateId); // This because we need to delete the children first.
     

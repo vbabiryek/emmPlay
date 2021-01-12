@@ -305,24 +305,26 @@
 												<hr>
 												<h4>Template ID : <input type="text" class="form-control vk-tempId"
 																	id="templateId" name="managedConfigTemplateId"
-																	value="${applicationPolicyTemplateId}" ></h4>
+																	value="${applicationPolicyTemplateId.getTemplateId()}" ></h4>
 													<table class="table">
 														
 														<thead>
 															<tr>
 																<th>Configuration Key</th>
 																<th>Configuration Value</th>
+																<th>Remove</th>
 															</tr>
 														</thead>
 														<tbody id="managedConfigTemplateTable">
-															<c:forEach items="${managedConfigurationTemplateVariables}" var="managedConfigTemplateVariables">
+															<c:forEach items="${applicationPolicyManagedConfigVariable.getConfigurationVariables()}" var="configVariables">
 																<tr class="apTemplateAndConfigRow">
 																		<td><input type="text" class="form-control vk-key"
 																		id="configurationVariables" name="configurationVariablesKey"
-																		value="${applicationPolicyManagedConfigVariable}"></td>
+																		value="${configVariables.key}"></td>
 																		<td><input type="text" class="form-control vk-val"
 																		id="configurationVariables" name="configurationVariablesVal"
-																		value="${applicationPolicyManagedConfigVariable}"></td>
+																		value="${configVariables.value}"></td>
+																		<td><button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">X</button></td>
 																</tr>
 															</c:forEach>
 																<tr id="ap-config-new-row">
@@ -335,6 +337,7 @@
 																		<td><input type="text" class="form-control"
 																		id="newConfigurationVariablesVal" name="ap-newConfigurationVariablesVal"
 																		value=""></td>
+																		<td><button style = "width:initial; height:80%" type="button" class="button btn-danger">X</button></td>
 																</tr>
 														</tbody>
 													</table>

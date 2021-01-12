@@ -37,6 +37,6 @@ public interface EnterpriseI {
 	public AdvancedSecurityOverridesE getDebuggingOverride(Long id);
 	public AppAutoUpdatePolicyE getAppAutoUpdatePolicy(Long id);
 	public AdvancedSecurityOverridesE getSafeBootOverride(Long id);
-	public ManagedConfigurationTemplate getManagedConfigurationTemplate(Long id);
+	public ManagedConfigurationTemplate getManagedConfigurationTemplate();
 	
 }

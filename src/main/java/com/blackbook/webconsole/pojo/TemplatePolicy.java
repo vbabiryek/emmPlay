@@ -24,6 +24,11 @@ public class TemplatePolicy implements Serializable{
 	}
 	
 
+	public TemplatePolicy() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public String getTemplateId() {
 		return templateId;
 	}

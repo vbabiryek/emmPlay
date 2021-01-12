@@ -25,7 +25,9 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.pojo.TemplatePolicy;
 import com.blackbook.webconsole.repositories.PolicyRepository;
+import com.blackbook.webconsole.repositories.TemplateIdRepository;
 import com.blackbook.webconsole.services.EnterpriseI;
 import com.blackbook.webconsole.services.EnterpriseService;
 
@@ -37,6 +39,9 @@ public class HomeController {
 	
 	@Autowired
 	public EnterpriseI enterpriseImpl;
+	
+	@Autowired
+	private TemplateIdRepository templateIdRepository;
 	
 	
 	//For views
@@ -67,8 +72,10 @@ public class HomeController {
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
 				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
-//				homeModel.addObject("applicationPolicyTemplateId", applicationPolicy.get(0).getTemplateId());
-//				homeModel.addObject("applicationPolicyManagedConfigVariable", applicationPolicy.get(0).getConfigurationVariables());
+				List<TemplatePolicy> tp = templateIdRepository.findAll(); 
+				TemplatePolicy latestTemplatePolicy = tp.get(tp.size() - 1);
+				homeModel.addObject("applicationPolicyTemplateId", latestTemplatePolicy);
+				homeModel.addObject("applicationPolicyManagedConfigVariable", latestTemplatePolicy);
 				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(applicationPolicy.get(0).getDelegatedScopes()));
 			}else {
@@ -77,7 +84,7 @@ public class HomeController {
 				homeModel.addObject("applicationPolicyMinimumVersionCode", Integer.valueOf(-1));
 				homeModel.addObject("applicationPolicyPermission", "");
 				homeModel.addObject("applicationPolicyPermissionGrantsStates", "");
-				homeModel.addObject("applicationPolicyTemplateId", "");
+				homeModel.addObject("applicationPolicyTemplateId", new TemplatePolicy());
 				homeModel.addObject("applicationPolicyManagedConfigVariable", new HashMap<>());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(new ArrayList<>()));
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", new ArrayList<>());
@@ -88,6 +95,7 @@ public class HomeController {
 		}
 		return homeModel;
 	}
+	
 	
 	@RequestMapping(value = Urls.ENTERPRISE_TOKEN, method = RequestMethod.GET)
 	public String getEnterprise(@RequestParam String enterpriseToken) {

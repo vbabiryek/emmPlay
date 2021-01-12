@@ -314,6 +314,7 @@ public class EnterpriseController {
 			//saving via jdbc not jpa, saving must occur just like this!
 			//application policy id is an external id that is supplied outside of this class so it must be set here because it is not generated
 			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
+			templateIdRepository.deleteByTemplateId(applicationsForm.getTemplatePolicy().getTemplateId());
 			templateIdRepository.save(applicationsForm.getTemplatePolicy());
 		}else {
 			//add a new applications object

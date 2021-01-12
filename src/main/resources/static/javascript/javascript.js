@@ -169,7 +169,7 @@ $("#applicationsForm").submit(function(event) {
 		templateIdPolicyObj.configurationVariables = {};
 		//iterating through all config variables which are part of the singular templateId policy obj.
 		
-		$(".apManagedConfigRow").each(function(index){
+		$(".apTemplateAndConfigRow").each(function(index){
 			var managedConfigTemplateObj = {};
 			var configurationKey = $(this).find("input:first").val();
 			var configurationValue = $(this).find("input:last").val();
@@ -407,9 +407,10 @@ $("#addMoreConfigs").click(function(e) {
 	var managedConfigVarKey = $("#newConfigurationVariablesKey").val();
 	var managedConfigVarVal = $("#newConfigurationVariablesVal").val();
 
-	$("#ap-config-new-row").before(`<tr class="apManagedConfigRow">
+	$("#ap-config-new-row").before(`<tr class="apTemplateAndConfigRow">
 											<td><input type="text" class="form-control" value="${managedConfigVarKey}"></td>
 											<td><input type="text" class="form-control" value="${managedConfigVarVal}"></td>
+											<td><button onclick = "$(this).parent().parent().remove()" style = "width:initial; height:80%" type="button" class="button btn-danger">X</button></td>
 											</tr>`);
 
 	$("#newConfigurationVariablesKey").val("");

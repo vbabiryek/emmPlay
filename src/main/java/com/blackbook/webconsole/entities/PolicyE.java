@@ -58,9 +58,6 @@ public class PolicyE extends AuditModel {
 	@JoinColumn(name = "safe_boot_disabled", referencedColumnName = "id")
 	private AdvancedSecurityOverridesE safeBoot;
 	
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "policyE")
-	@JoinColumn(name = "template_id", referencedColumnName = "id")
-	private ApplicationsPolicyE templateId;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "policyE")
 	private List<ApplicationsPolicyE> applicationPolicy;
@@ -161,13 +158,6 @@ public class PolicyE extends AuditModel {
 		this.safeBoot = safeBoot;
 	}
 	
-	public ApplicationsPolicyE getTemplateId() {
-		return templateId;
-	}
-	
-	public void setTemplateId(ApplicationsPolicyE templateId) {
-		this.templateId = templateId;
-	}
 
 	@Override
 	public String toString() {
