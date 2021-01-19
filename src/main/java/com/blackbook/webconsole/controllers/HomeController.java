@@ -114,8 +114,6 @@ public class HomeController {
 														+ "<option value='ENABLE_SYSTEM_APP'>ENABLE_SYSTEM_APP</option>";
 		for(String delegatedScope: delegatedScopes) {
 			listHtml = listHtml.replace(String.format(">%s",  delegatedScope), String.format(" selected >%s",  delegatedScope));
-			//goes through the values of delegated scopes individually and determines if it's already in the list. If it is, it replaces it with the word selected
-			//if there are no values, it will return the default. 
 		}
 		return listHtml;
 	}

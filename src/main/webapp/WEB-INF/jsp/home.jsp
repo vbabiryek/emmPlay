@@ -256,6 +256,7 @@
 															<button id="add-row" onclick="addRow(event)" type = "button" class="btn btn-success">Add Row</button>
 												</div> --%>
 											
+											<!-- localstorage -->
 											<div class="form-group">
 												<label for="configurations">ManagedConfigurations:</label>
 												<hr>

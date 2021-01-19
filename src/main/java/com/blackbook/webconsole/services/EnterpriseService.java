@@ -305,6 +305,7 @@ public class EnterpriseService implements EnterpriseI {
 		LOG.info("Listing devices...");
 		ListDevicesResponse response = androidManagementClient.enterprises().devices().list(enterpriseName).execute();
 		listOfDevices = response.getDevices();
+		LOG.info("enterprises.devices.get is: " + androidManagementClient.enterprises().devices().get("enterprises/LC0199557j/devices/3a73b9c22843ed23"));
 		return listOfDevices;
 	}
 

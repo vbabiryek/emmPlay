@@ -330,6 +330,7 @@ public class EnterpriseController {
 			//this takes the data, tells it who the parent is and saves it in the repo
 			//saving via jdbc not jpa, saving must occur just like this!
 			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
+			templateIdRepository.deleteByTemplateId(applicationsForm.getTemplatePolicy().getTemplateId());
 			templateIdRepository.save(applicationsForm.getTemplatePolicy());
 		}
 		}
