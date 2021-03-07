@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "Permissions_Requirements")
+@Table(name = "Permission_Grants")
 public class PermissionPolicyE extends AuditModel {
 
 	/**

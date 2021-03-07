@@ -198,25 +198,6 @@
 												<br> <br>
 
 
-											<!-- Permission Grants input -->
-											<div class="form-group">
-												<label for="grantedPermissionForApp">PermissionGrants:</label>
-												<hr>
-												<br> <label for="appPermissionGrantsPerm">Permission</label>
-												<input type="text" class="form-control"
-													id="permission" name="permission" value= "${applicationPolicyPermission}"> <br>
-												<label for="appPermissionGrants">Grant State</label> <input
-													type="text" class="form-control" id="policy"
-													name="policy" list="appPermissionGrantsList" value= "${applicationPolicyPermissionGrantsStates}">
-												<datalist id="appPermissionGrantsList">
-													<option value="PERMISSION_POLICY_UNSPECIFIED">
-													<option value="PROMPT">
-													<option value="GRANT">
-													<option value="DENY">
-												</datalist>
-											</div>
-
-
 											<!-- Managed Configuration input -->
 											
 											<%-- <div class="form-group">
@@ -529,7 +510,7 @@
 
 
 					</div>
-				</div>
+				</div>	
 
 
 				<!-- Modal Content for System Update Requirements -->
@@ -754,6 +735,42 @@
 							
 					</div>
 				</div>
+				
+				<!-- Modal Content for Permission Grants -->
+					<div class= "modal fade" id="myPermissionModal" role="dialog">
+							<div class="modal-dialog">
+								
+								<!-- Modal content Content form-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<h4 class="modal-title">System level Permission Grants</h4>
+								</div>
+								<div class="modal-body">
+								<form method="POST" action="${Urls.ADD_PERMISSIONS}" id="permissionForm">
+									<div class="form-group">
+										<label for="grantedPermissionForApp">PermissionGrants:</label>
+											<hr>
+											<br> <label for="appPermissionGrantsPerm">Permission</label>
+											<input type="text" class="form-control" id="permission" name="permission" value= "${permissionPolicy.getPermission()}"> <br>
+										<label for="appPermissionGrants">Grant State</label> 
+										<input type="text" class="form-control" id="policy" name="policy" list="appPermissionGrantsList" value= "${permissionPolicy.getPolicy()}">
+											<datalist id="appPermissionGrantsList">
+												<option value="PERMISSION_POLICY_UNSPECIFIED">
+												<option value="PROMPT">
+												<option value="GRANT">
+												<option value="DENY">
+											</datalist>
+									</div>
+									<button type="submit" class="btn btn-default">Submit</button>
+								</form>
+								</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
 			</div>
 			<span class="glyphicon glyphicon-refresh appear" id="refreshBtn"
 				onclick="refreshDevices()"

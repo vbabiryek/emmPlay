@@ -32,11 +32,12 @@ public interface EnterpriseI {
 	public AdvancedSecurityOverrides getAdvancedSecurityOverrides(Long id);
 	public String createIframe();
 	
-	public Operation wipeDevice(String deviceName) throws IOException;
+	public void wipeDevice(String deviceName) throws IOException;
 	public Operation lockDevice(String deviceName) throws IOException;
 	public AdvancedSecurityOverridesE getDebuggingOverride(Long id);
 	public AppAutoUpdatePolicyE getAppAutoUpdatePolicy(Long id);
 	public AdvancedSecurityOverridesE getSafeBootOverride(Long id);
 	public ManagedConfigurationTemplate getManagedConfigurationTemplate();
+	public Operation relinquishOwnership(String deviceName) throws IOException;
 	
 }

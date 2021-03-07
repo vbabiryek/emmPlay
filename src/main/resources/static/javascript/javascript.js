@@ -241,7 +241,9 @@ $("#applicationsForm").submit(function(event) {
 function devices() {
 	$.get("/devices", function(data) {
 		$(".main_content").html(data.map(x => `<p>The devices listed under this enteprise are:  
-		<span class = 'deviceListUrl'> ${x.name} </span><button class = 'btn btn-warning' onclick = 'wipeDevice("${x.name}")'>Wipe Device</button>
+		<span class = 'deviceListUrl'> ${x.name} </span>
+		<button class = 'btn btn-warning' onclick = 'wipeDevice("${x.name}")'>Wipe Device</button>
+		<button class = 'btn btn-danger' onclick = 'relinquishOwnership("${x.name}")'>Relinquish Ownership</button>
 		<button class = 'btn btn-danger' onclick = 'lockDevice("${x.name}")'>Lock Device</button></p>`));
 		$("#refreshBtn").css("display", "block");
 	});
@@ -308,27 +310,20 @@ function createIframe() {
 			iframe.register('onproductselect', function(event) {
 				console.log("event from SELECT is: " + JSON.stringify(event));
 
-				//1. We take the package name into localStorage as stringified array
-				//2. We ensure that when it's stored it's unique package names (values)
-
 				if (event.action == "selected") {
 
 					let managedAppsArray = addToLocalStorageArray("managedApps", event.packageName);
 					populateTable(managedAppsArray);
 
-					//if(searchWords("span", "This app offers managed configuration")){
 					createManagedConfigIframe(event.packageName);
-					//}
-
 				}
 
-
 				var htmlString = `<tr id="selected-app-row">
-																		<td><input type="text" class="form-control"
-																		id="newPackageName" name="ap-newPackageName"
-																		value=""></td>
-																		<td><button onclick = "removeSelectedApp()">Remove Selected App</button></td>
-																</tr>`;
+										<td><input type="text" class="form-control"
+												id="newPackageName" name="ap-newPackageName"
+												value=""></td>
+										<td><button onclick = "removeSelectedApp()">Remove Selected App</button></td>
+								</tr>`;
 			}, gapi.iframes.CROSS_ORIGIN_IFRAMES_FILTER);
 			$(".main_content").html(iframe);
 		});

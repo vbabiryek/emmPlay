@@ -59,7 +59,7 @@ public class EnterpriseController {
 	@Autowired
 	public SystemUpdateRepository systemUpdateRepo;
 	@Autowired
-	public PermissionPolicyRepository permPolicy;
+	public PermissionPolicyRepository permPolicyRepo;
 	@Autowired
 	private AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
@@ -135,21 +135,21 @@ public class EnterpriseController {
 
 	@PostMapping(value = Urls.ADD_PERMISSIONS, consumes = { MediaType.ALL_VALUE })
 	public PermissionPolicyE addPermissionPolicy(@RequestBody PermissionPolicyE permissionForm) {
-		Optional<PermissionPolicyE> foundPermPolicy = permPolicy.findById(1L);
+		Optional<PermissionPolicyE> foundPermPolicy = permPolicyRepo.findById(1L);
 		if (foundPermPolicy.isPresent()) {
 			PermissionPolicyE permissionPolicy = foundPermPolicy.get();
 			permissionPolicy.setPermission(permissionForm.getPermission());
 			permissionPolicy.setPolicy(permissionForm.getPolicy());
-			permissionPolicy.setPolicyE(permissionForm.getPolicyE());
-			return permPolicy.save(permissionPolicy);
+//			permissionPolicy.setPolicyE(permissionForm.getPolicyE());
+			return permPolicyRepo.save(permissionPolicy);
 		} else {
-			return permPolicy.save(permissionForm);
+			return permPolicyRepo.save(permissionForm);
 		}
 	}
 
 	@RequestMapping(value = Urls.GET_PERMISSIONS, method = RequestMethod.GET)
 	public PermissionPolicyE getPermissionPolicy() {
-		return permPolicy.findById(1L).isPresent() ? permPolicy.findById(1L).get() : null;
+		return permPolicyRepo.findById(1L).isPresent() ? permPolicyRepo.findById(1L).get() : null;
 	}
 
 	@PostMapping(value = Urls.ADD_SYSTEM_UPDATE, consumes = { MediaType.ALL_VALUE })
@@ -370,14 +370,13 @@ public class EnterpriseController {
 	}
 	
 	@RequestMapping(value = Urls.WIPE_DEVICE, method = RequestMethod.GET)
-	public Operation wipeDevice(@PathVariable String enterpriseId, @PathVariable String deviceName) {
+	public void wipeDevice(@PathVariable String enterpriseId, @PathVariable String deviceName) {
 		try {
-			return enterpriseImpl.wipeDevice(String.format("enterprises/%s/devices/%s", enterpriseId, deviceName));
+			enterpriseImpl.wipeDevice(String.format("enterprises/%s/devices/%s", enterpriseId, deviceName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		return null;
+		}		
 		
 	}
 	

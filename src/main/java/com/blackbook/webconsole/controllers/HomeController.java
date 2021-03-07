@@ -60,8 +60,8 @@ public class HomeController {
 			homeModel.addObject("debuggingPolicy", currentPolicyE.getUsbDebuggingPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getUsbDebuggingPolicy());
 			homeModel.addObject("safeBootPolicy", currentPolicyE.getSafeBoot() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getSafeBoot());
 			homeModel.addObject("appAutoUpdatePolicy", currentPolicyE.getAppUpdate() == null ? new AppAutoUpdatePolicyE() : currentPolicyE.getAppUpdate());
-			homeModel.addObject("permissionPermissionPolicy", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPermission());
-			homeModel.addObject("permissionPolicyPerm", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPolicy());
+//			homeModel.addObject("permission", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPermission());
+//			homeModel.addObject("policy", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPolicy());
 			List<ApplicationsPolicyE> applicationPolicy = currentPolicyE.getApplicationPolicy();
 			homeModel.addObject("applicationPolicies", applicationPolicy == null ? new ApplicationsPolicyE() : applicationPolicy);
 	
@@ -71,19 +71,19 @@ public class HomeController {
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", applicationPolicy.get(0).getAccessibleTrackIds());
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
-				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
+//				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
 				List<TemplatePolicy> tp = templateIdRepository.findAll(); 
 				TemplatePolicy latestTemplatePolicy = tp.get(tp.size() - 1);
 				homeModel.addObject("applicationPolicyTemplateId", latestTemplatePolicy);
 				homeModel.addObject("applicationPolicyManagedConfigVariable", latestTemplatePolicy);
-				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());
+//				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(applicationPolicy.get(0).getDelegatedScopes()));
 			}else {
 				homeModel.addObject("managedConfigurationMap", new HashMap<>());
 				homeModel.addObject("applicationPolicyDisabled", Boolean.valueOf(true));
 				homeModel.addObject("applicationPolicyMinimumVersionCode", Integer.valueOf(-1));
-				homeModel.addObject("applicationPolicyPermission", "");
-				homeModel.addObject("applicationPolicyPermissionGrantsStates", "");
+//				homeModel.addObject("applicationPolicyPermission", "");
+//				homeModel.addObject("applicationPolicyPermissionGrantsStates", "");
 				homeModel.addObject("applicationPolicyTemplateId", new TemplatePolicy());
 				homeModel.addObject("applicationPolicyManagedConfigVariable", new HashMap<>());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(new ArrayList<>()));

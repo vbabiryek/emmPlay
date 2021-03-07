@@ -97,7 +97,7 @@ public class EnterpriseService implements EnterpriseI {
 	AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
-	
+
 	@Autowired
 	DebuggingRepository debugRepo;
 	@Autowired
@@ -106,13 +106,13 @@ public class EnterpriseService implements EnterpriseI {
 	private ApplicationRepository applicationRepo;
 	@Autowired
 	TemplateIdRepository templateRepo;
-	
+
 	Policy myPolicy;
 	String enterpriseToken;
 	private Enterprise enterprise;
 	JSONObject onproductselect = new JSONObject();
-	
-	//Step 1
+
+	// Step 1
 	@Override
 	public HashMap<String, String> enterpriseSignUp() {
 		JSONObject credentialsJson = null;
@@ -132,7 +132,7 @@ public class EnterpriseService implements EnterpriseI {
 
 		InputStream is = new ByteArrayInputStream(str.getBytes());
 		GoogleCredential credential = null;
-		
+
 		try {
 			credential = GoogleCredential.fromStream(is).createScoped(Collections.singleton(OAUTH_SCOPE));
 		} catch (IOException e) {
@@ -213,7 +213,6 @@ public class EnterpriseService implements EnterpriseI {
 				// Set the policy to be used by the device.
 				setPolicy(enterpriseName, POLICY_ID, getPolicy());
 				LOG.info("enterpriseName is: " + enterpriseName);
-			
 
 				List<Device> devices = listDevices(enterpriseName);
 				LOG.info("devices are " + devices.isEmpty());
@@ -231,20 +230,17 @@ public class EnterpriseService implements EnterpriseI {
 	/** Here's where I set the stage to build my policy. */
 	@Override
 	public Policy getPolicy() {
-		
+
 		List<String> categories = new ArrayList<>();
 		categories.add("android.intent.category.HOME");
 		categories.add("android.intent.category.DEFAULT");
 		List<ApplicationsPolicyE> applicationPolicy = applicationRepo.findAll();
-		
+
 		ArrayList<ApplicationPolicy> applications = new ArrayList<>();
-		//How to pass the localStorage variables to Android Management API?
-		//So right now, we do a copy/paste into our templateId textbox on the UI
-		
-		for(int i = 0; i < applicationPolicy.size(); i++) {
+
+		for (int i = 0; i < applicationPolicy.size(); i++) {
 			ApplicationsPolicyE result = applicationPolicy.get(i);
-			ApplicationPolicy appPolicy = new ApplicationPolicy()
-					.setPackageName(result.getPackageName())
+			ApplicationPolicy appPolicy = new ApplicationPolicy().setPackageName(result.getPackageName())
 					.setInstallType(result.getInstallType())
 					.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
 					.setPermissionGrants(getPermissionGrants(1L))
@@ -253,20 +249,16 @@ public class EnterpriseService implements EnterpriseI {
 					.setDisabled(result.getDisabled());
 			applications.add(appPolicy);
 		}
-		
-		LOG.info("application size outside of loop are: " + applications.size());
-		
-		return new Policy()
-				.setPermissionGrants(getPermissionGrants(1L))
-				.setSystemUpdate(getSystemUpdatePolicy(1L))
+
+		return new Policy().setPermissionGrants(getPermissionGrants(1L)).setSystemUpdate(getSystemUpdatePolicy(1L))
 				.setPasswordRequirements(getPasswordRequirements(1L))
 				.setAdvancedSecurityOverrides(getAdvancedSecurityOverrides(1L))
-				.setPolicyEnforcementRules(getPolicyEnforcementRules(1L))
-				.setApplications(applications)
-				.setSafeBootDisabled(getSafeBootOverride(1L) == null ? Boolean.FALSE : getSafeBootOverride(1L).getSafeBootDisabled())
-				.setDebuggingFeaturesAllowed(getDebuggingOverride(1L) == null ? Boolean.FALSE : getDebuggingOverride(1L).getDebuggingFeaturesAllowed());
+				.setPolicyEnforcementRules(getPolicyEnforcementRules(1L)).setApplications(applications)
+				.setSafeBootDisabled(
+						getSafeBootOverride(1L) == null ? Boolean.FALSE : getSafeBootOverride(1L).getSafeBootDisabled())
+				.setDebuggingFeaturesAllowed(getDebuggingOverride(1L) == null ? Boolean.FALSE
+						: getDebuggingOverride(1L).getDebuggingFeaturesAllowed());
 	}
-
 
 	/**
 	 * Sets the policy of the given id to the given value.
@@ -305,15 +297,18 @@ public class EnterpriseService implements EnterpriseI {
 		LOG.info("Listing devices...");
 		ListDevicesResponse response = androidManagementClient.enterprises().devices().list(enterpriseName).execute();
 		listOfDevices = response.getDevices();
-		LOG.info("enterprises.devices.get is: " + androidManagementClient.enterprises().devices().get("enterprises/LC0199557j/devices/3a73b9c22843ed23"));
+		LOG.info("enterprises.devices.get is: " + androidManagementClient.enterprises().devices()
+				.get("enterprises/LC0199557j/devices/3a73b9c22843ed23"));
 		return listOfDevices;
 	}
 
-	/** Reboots my device for the standard wipe feature. Note that reboot only works on Android N+. */
+	/**
+	 * Reboots my device for the standard wipe feature. Note that reboot only works
+	 * on Android N+.
+	 */
 	@Override
-	public Operation wipeDevice(String deviceName) throws IOException {
-		Command command = new Command().setType("REBOOT");
-		return androidManagementClient.enterprises().devices().issueCommand(deviceName, command).execute();
+	public void wipeDevice(String deviceName) throws IOException {
+		androidManagementClient.enterprises().devices().delete(deviceName).execute();
 	}
 
 	/** Locks my device. */
@@ -326,6 +321,13 @@ public class EnterpriseService implements EnterpriseI {
 	}
 
 
+	@Override
+	public Operation relinquishOwnership(String deviceName) throws IOException{
+		Command command = new Command().setType("RELINQUISH_OWNERSHIP");
+		return androidManagementClient.enterprises().devices().issueCommand(deviceName,  command).execute();
+		
+	}
+	
 	@Override
 	public PasswordRequirements getPasswordRequirements(Long id) {
 		Optional<PasswordRequirementsE> passwordRequirement = passwordPolicyRepo.findById(id);
@@ -386,16 +388,17 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
-	
-	/*In case we ever want to explore this route
+
+	/*
+	 * In case we ever want to explore this route
 	 * 
-	 * public Policy silentlyUninstall() {
-		return new Policy().setApplications(Collections.singletonList(new ApplicationPolicy()
-				.setInstallType("BLOCKED")));
-				
-	}*/
-	
+	 * public Policy silentlyUninstall() { return new
+	 * Policy().setApplications(Collections.singletonList(new ApplicationPolicy()
+	 * .setInstallType("BLOCKED")));
+	 * 
+	 * }
+	 */
+
 	@Override
 	public AdvancedSecurityOverrides getAdvancedSecurityOverrides(Long id) {
 		Optional<AdvancedSecurityOverridesE> advancedSecurityOverrides = advancedSecurityOverridesRepo.findById(id);
@@ -407,31 +410,30 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public AdvancedSecurityOverridesE getDebuggingOverride(Long id) {
 		Optional<AdvancedSecurityOverridesE> advancedDebuggingOverrides = debugRepo.findById(id);
 		AdvancedSecurityOverridesE advancedDebuggingOverride = new AdvancedSecurityOverridesE();
-		if(advancedDebuggingOverrides.isPresent()) {
+		if (advancedDebuggingOverrides.isPresent()) {
 			AdvancedSecurityOverridesE result = advancedDebuggingOverrides.get();
 			advancedDebuggingOverride.setDebuggingFeaturesAllowed(result.getDebuggingFeaturesAllowed());
 			return advancedDebuggingOverride;
 		}
 		return null;
 	}
-	
+
 	@Override
 	public AdvancedSecurityOverridesE getSafeBootOverride(Long id) {
 		Optional<AdvancedSecurityOverridesE> advancedSafeBootOverrides = safebootRepo.findById(id);
 		AdvancedSecurityOverridesE advancedSafeBootOverride = new AdvancedSecurityOverridesE();
-		if(advancedSafeBootOverrides.isPresent()) {
+		if (advancedSafeBootOverrides.isPresent()) {
 			AdvancedSecurityOverridesE result = advancedSafeBootOverrides.get();
 			advancedSafeBootOverride.setSafeBootDisabled(result.getSafeBootDisabled());
 			return advancedSafeBootOverride;
 		}
 		return null;
 	}
-	
 
 	@Override
 	public SystemUpdate getSystemUpdatePolicy(Long id) {
@@ -446,7 +448,7 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public AppAutoUpdatePolicyE getAppAutoUpdatePolicy(Long id) {
 		Optional<AppAutoUpdatePolicyE> appUpdates = appUpdateRepo.findById(id);
@@ -458,21 +460,19 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
-	
+
 	@Override
 	public ManagedConfigurationTemplate getManagedConfigurationTemplate() {
-		List<TemplatePolicy> tp = templateRepo.findAll(); 
-		if(tp.size() == 0) {
+		List<TemplatePolicy> tp = templateRepo.findAll();
+		if (tp.size() == 0) {
 			return null;
 		}
 		TemplatePolicy latestTemplate = tp.get(tp.size() - 1);
 		ManagedConfigurationTemplate templateConfig = new ManagedConfigurationTemplate();
-		templateConfig.setTemplateId(latestTemplate.getTemplateId());//Has been set in the JDBC
-		templateConfig.setConfigurationVariables(latestTemplate.getConfigurationVariables());//Has been set in the JDBC
+		templateConfig.setTemplateId(latestTemplate.getTemplateId());// Has been set in the JDBC
+		templateConfig.setConfigurationVariables(latestTemplate.getConfigurationVariables());// Has been set in the JDBC
 		return templateConfig;
 	}
-	
 
 	@Override
 	public List<PermissionGrant> getPermissionGrants(Long id) {
@@ -486,8 +486,6 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
-
 
 	private List<PolicyEnforcementRule> getPolicyEnforcementRules(Long id) {
 		Optional<PolicyEnforcementRulesE> policyEnforcementRules = policyEnforcementRulesRepo.findById(id);
@@ -510,6 +508,5 @@ public class EnterpriseService implements EnterpriseI {
 		}
 		return null;
 	}
-	
-	
+
 }
