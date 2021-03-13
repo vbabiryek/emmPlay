@@ -1,6 +1,8 @@
 package com.blackbook.webconsole;
 
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +18,7 @@ import com.blackbook.webconsole.services.EnterpriseI;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RunWith(Parameterized.class)
 class WebconsoleApplicationTests {
 
 	@Autowired
@@ -28,6 +31,7 @@ class WebconsoleApplicationTests {
 	void visitHomepage() throws Exception {
 		mockMvc.perform(get(Urls.GET_COSU_POLICY)).andDo(print()).andExpect(status().isOk());
 	}
+	
 	
 	@Test
 	void urlTesting() {

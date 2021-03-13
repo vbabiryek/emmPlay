@@ -3,8 +3,12 @@ package com.blackbook.webconsole.pojo;
 import java.io.Serializable;
 import java.util.Map;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-public class TemplatePolicy implements Serializable{
+
+public class ManagedConfigurationTemplateE implements Serializable{
 	
 	/**
 	 * 
@@ -17,14 +21,14 @@ public class TemplatePolicy implements Serializable{
 	private String templateId;
 	private Map<String, String> configurationVariables;
 	
-	public TemplatePolicy(Long id, Long applicationPolicyId, String templateId) {
+	public ManagedConfigurationTemplateE(Long id, Long applicationPolicyId, String templateId) {
 		this.id = id;
 		this.applicationPolicyId = applicationPolicyId;
 		this.templateId = templateId;
 	}
 	
 
-	public TemplatePolicy() {
+	public ManagedConfigurationTemplateE() {
 		// TODO Auto-generated constructor stub
 	}
 

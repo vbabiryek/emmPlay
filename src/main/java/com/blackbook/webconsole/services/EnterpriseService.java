@@ -28,7 +28,7 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
-import com.blackbook.webconsole.pojo.TemplatePolicy;
+import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
 import com.blackbook.webconsole.repositories.DebuggingRepository;
 import com.blackbook.webconsole.repositories.PasswordRepository;
@@ -36,7 +36,7 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.SafeBootRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
-import com.blackbook.webconsole.repositories.TemplateIdRepository;
+import com.blackbook.webconsole.repositories.ManagedConfigurationTemplateRepository;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -105,7 +105,7 @@ public class EnterpriseService implements EnterpriseI {
 	@Autowired
 	private ApplicationRepository applicationRepo;
 	@Autowired
-	TemplateIdRepository templateRepo;
+	ManagedConfigurationTemplateRepository managedConfigRepo;
 
 	Policy myPolicy;
 	String enterpriseToken;
@@ -243,8 +243,7 @@ public class EnterpriseService implements EnterpriseI {
 			ApplicationPolicy appPolicy = new ApplicationPolicy().setPackageName(result.getPackageName())
 					.setInstallType(result.getInstallType())
 					.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
-					.setPermissionGrants(getPermissionGrants(1L))
-					.setManagedConfiguration(result.getManagedConfigurationMap())
+//					.setManagedConfiguration(result.getManagedConfigurationMap())
 					.setManagedConfigurationTemplate(getManagedConfigurationTemplate())
 					.setDisabled(result.getDisabled());
 			applications.add(appPolicy);
@@ -463,11 +462,11 @@ public class EnterpriseService implements EnterpriseI {
 
 	@Override
 	public ManagedConfigurationTemplate getManagedConfigurationTemplate() {
-		List<TemplatePolicy> tp = templateRepo.findAll();
+		List<ManagedConfigurationTemplateE> tp = managedConfigRepo.findAll();
 		if (tp.size() == 0) {
 			return null;
 		}
-		TemplatePolicy latestTemplate = tp.get(tp.size() - 1);
+		ManagedConfigurationTemplateE latestTemplate = tp.get(tp.size() - 1);
 		ManagedConfigurationTemplate templateConfig = new ManagedConfigurationTemplate();
 		templateConfig.setTemplateId(latestTemplate.getTemplateId());// Has been set in the JDBC
 		templateConfig.setConfigurationVariables(latestTemplate.getConfigurationVariables());// Has been set in the JDBC

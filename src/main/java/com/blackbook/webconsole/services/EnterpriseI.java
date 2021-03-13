@@ -7,7 +7,6 @@ import java.util.List;
 import com.blackbook.webconsole.entities.AdvancedSecurityOverridesE;
 import com.blackbook.webconsole.entities.AppAutoUpdatePolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
-import com.blackbook.webconsole.pojo.TemplatePolicy;
 import com.google.api.services.androidmanagement.v1.model.AdvancedSecurityOverrides;
 import com.google.api.services.androidmanagement.v1.model.Device;
 import com.google.api.services.androidmanagement.v1.model.Enterprise;

@@ -110,7 +110,8 @@ $("#applicationsForm").submit(function(event) {
 	event.preventDefault();
 	var post_url = $(this).attr("action");
 	var indexed_array = {};
-	var managedConfigurationMap = {};
+	//var managedConfigurationMap = {};
+	//var managedConfigurationTemplate = {};
 	var delegatedScopes = [];
 	var applications = [];
 	var accessibleTrackIds = [];
@@ -170,24 +171,23 @@ $("#applicationsForm").submit(function(event) {
 		//iterating through all config variables which are part of the singular templateId policy obj.
 		
 		$(".apTemplateAndConfigRow").each(function(index){
-			var managedConfigTemplateObj = {};
+			var managedConfigurationTemplate = {};
 			var configurationKey = $(this).find("input:first").val();
 			var configurationValue = $(this).find("input:last").val();
 			templateIdPolicyObj.configurationVariables[[configurationKey]] = configurationValue;
 	});
 		for(let appObj of applications){
-			appObj.templatePolicy = templateIdPolicyObj;
+			appObj.managedConfigurationTemplate = templateIdPolicyObj;
 		}
 	}
 
-	$(".vk-key-value").each(function(index) {// Now we have every single
+	//$(".vk-key-value").each(function(index) {
 		// value, one row at a time.
 		// "this" obtains every field
-		var key = $(this).attr("vk-key");
-		var value = $(this).val();
-		managedConfigurationMap[[key]] = value;
-
-	});
+		//var key = $(this).attr("vk-key");
+		//var value = $(this).val();
+		//managedConfigurationMap[[key]] = value;
+	//});
 
 
 	$.map(unindexed_array, function(n, i) {

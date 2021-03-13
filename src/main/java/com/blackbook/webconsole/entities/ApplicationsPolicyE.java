@@ -19,7 +19,7 @@ import javax.persistence.Transient;
 
 import org.springframework.lang.NonNull;
 
-import com.blackbook.webconsole.pojo.TemplatePolicy;
+import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -40,20 +40,18 @@ public class ApplicationsPolicyE extends AuditModel{
 	
 	private String installType;
 	private String defaultPermissionPolicy;
-	private String permission;
-	private String policy;
 	private Boolean disabled;
 	private Integer minimumVersionCode;
 	
 	@Transient
-	private TemplatePolicy templatePolicy;
+	private ManagedConfigurationTemplateE managedConfigurationTemplate;
 	
 
 	@ElementCollection
 	private List<String> delegatedScopes;
 	
-	@Convert(converter = HashMapConverter.class)
-	private Map<String, Object> managedConfigurationMap;
+//	@Convert(converter = HashMapConverter.class)
+//	private Map<String, Object> managedConfigurationMap;
 
 	
 	@JsonIgnore
@@ -128,12 +126,12 @@ public class ApplicationsPolicyE extends AuditModel{
 	public void setPolicyE(PolicyE policyE) {
 		this.policyE = policyE;
 	}
-	public Map<String, Object> getManagedConfigurationMap() {
-		return managedConfigurationMap;
-	}
-	public void setManagedConfigurationMap(Map<String, Object> managedConfigurationMap) {
-		this.managedConfigurationMap = managedConfigurationMap;
-	}
+//	public Map<String, Object> getManagedConfigurationMap() {
+//		return managedConfigurationMap;
+//	}
+//	public void setManagedConfigurationMap(Map<String, Object> managedConfigurationMap) {
+//		this.managedConfigurationMap = managedConfigurationMap;
+//	}
 
 	public List<AppTrackInfoE> getAccessibleTrackIds() {
 		return accessibleTrackIds;
@@ -143,31 +141,12 @@ public class ApplicationsPolicyE extends AuditModel{
 		this.accessibleTrackIds = accessibleTrackIds;
 	}
 
-	public String getPermission() {
-		return permission;
+	public ManagedConfigurationTemplateE getManagedConfigurationTemplate() {
+		return managedConfigurationTemplate;
 	}
 
-	public void setPermission(String permission) {
-		this.permission = permission;
+	public void setManagedConfigurationTemplate(ManagedConfigurationTemplateE managedConfigurationTemplate) {
+		this.managedConfigurationTemplate = managedConfigurationTemplate;
 	}
 
-	public String getPolicy() {
-		return policy;
-	}
-
-	public void setPolicy(String policy) {
-		this.policy = policy;
-	}
-
-
-	public TemplatePolicy getTemplatePolicy() {
-		return templatePolicy;
-	}
-
-	public void setTemplatePolicy(TemplatePolicy templatePolicy) {
-		this.templatePolicy = templatePolicy;
-	}
-
-	
-	
 }

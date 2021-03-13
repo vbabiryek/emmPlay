@@ -29,7 +29,6 @@ import com.blackbook.webconsole.entities.PasswordRequirementsE;
 import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
-import com.blackbook.webconsole.pojo.TemplatePolicy;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
@@ -38,7 +37,7 @@ import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
 import com.blackbook.webconsole.repositories.PolicyRepository;
 import com.blackbook.webconsole.repositories.SystemUpdateRepository;
-import com.blackbook.webconsole.repositories.TemplateIdRepository;
+import com.blackbook.webconsole.repositories.ManagedConfigurationTemplateRepository;
 import com.blackbook.webconsole.services.EnterpriseI;
 import com.blackbook.webconsole.services.EnterpriseService;
 import com.google.api.services.androidmanagement.v1.AndroidManagement;
@@ -74,7 +73,7 @@ public class EnterpriseController {
 	AndroidManagement androidManagementClient;
 	
 	@Autowired
-	private TemplateIdRepository templateIdRepository;
+	private ManagedConfigurationTemplateRepository templateIdRepository;
 	
 
 	@RequestMapping(value = Urls.ENTERPRISE_SIGN_UP, method = RequestMethod.GET)
@@ -297,11 +296,9 @@ public class EnterpriseController {
 			pol.setPackageName(applicationsForm.getPackageName());
 			pol.setInstallType(applicationsForm.getInstallType());
 			pol.setDefaultPermissionPolicy(applicationsForm.getDefaultPermissionPolicy());
-			pol.setPermission(applicationsForm.getPermission());
-			pol.setPolicy(applicationsForm.getPolicy());
 			pol.setDisabled(applicationsForm.getDisabled());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
-			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
+//			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
 			
 			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
@@ -313,9 +310,9 @@ public class EnterpriseController {
 			response.add(applicationRepo.save(pol));
 			//saving via jdbc not jpa, saving must occur just like this!
 			//application policy id is an external id that is supplied outside of this class so it must be set here because it is not generated
-			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
-			templateIdRepository.deleteByTemplateId(applicationsForm.getTemplatePolicy().getTemplateId());
-			templateIdRepository.save(applicationsForm.getTemplatePolicy());
+			applicationsForm.getManagedConfigurationTemplate().setApplicationPolicyId(1L);
+			templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
+			templateIdRepository.save(applicationsForm.getManagedConfigurationTemplate());
 		}else {
 			//add a new applications object
 			
@@ -329,9 +326,9 @@ public class EnterpriseController {
 			response.add(applicationRepo.save(applicationsForm));
 			//this takes the data, tells it who the parent is and saves it in the repo
 			//saving via jdbc not jpa, saving must occur just like this!
-			applicationsForm.getTemplatePolicy().setApplicationPolicyId(1L);
-			templateIdRepository.deleteByTemplateId(applicationsForm.getTemplatePolicy().getTemplateId());
-			templateIdRepository.save(applicationsForm.getTemplatePolicy());
+			applicationsForm.getManagedConfigurationTemplate().setApplicationPolicyId(1L);
+			templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
+			templateIdRepository.save(applicationsForm.getManagedConfigurationTemplate());
 		}
 		}
 		return response;

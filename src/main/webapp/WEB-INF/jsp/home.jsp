@@ -287,7 +287,7 @@
 												<hr>
 												<h4>Template ID : <input type="text" class="form-control vk-tempId"
 																	id="templateId" name="managedConfigTemplateId"
-																	value="${applicationPolicyTemplateId.getTemplateId()}" ></h4>
+																	value="${applicationPolicyTemplateId}" ></h4>
 													<table class="table">
 														
 														<thead>
@@ -298,7 +298,7 @@
 															</tr>
 														</thead>
 														<tbody id="managedConfigTemplateTable">
-															<c:forEach items="${applicationPolicyManagedConfigVariable.getConfigurationVariables()}" var="configVariables">
+															<c:forEach items="${applicationPolicyManagedConfigVariable}" var="configVariables">
 																<tr class="apTemplateAndConfigRow">
 																		<td><input type="text" class="form-control vk-key"
 																		id="configurationVariables" name="configurationVariablesKey"

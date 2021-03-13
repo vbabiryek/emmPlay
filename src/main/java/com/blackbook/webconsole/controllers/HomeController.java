@@ -25,9 +25,9 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
-import com.blackbook.webconsole.pojo.TemplatePolicy;
+import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
 import com.blackbook.webconsole.repositories.PolicyRepository;
-import com.blackbook.webconsole.repositories.TemplateIdRepository;
+import com.blackbook.webconsole.repositories.ManagedConfigurationTemplateRepository;
 import com.blackbook.webconsole.services.EnterpriseI;
 import com.blackbook.webconsole.services.EnterpriseService;
 
@@ -41,7 +41,7 @@ public class HomeController {
 	public EnterpriseI enterpriseImpl;
 	
 	@Autowired
-	private TemplateIdRepository templateIdRepository;
+	private ManagedConfigurationTemplateRepository templateIdRepository;
 	
 	
 	//For views
@@ -65,26 +65,21 @@ public class HomeController {
 			List<ApplicationsPolicyE> applicationPolicy = currentPolicyE.getApplicationPolicy();
 			homeModel.addObject("applicationPolicies", applicationPolicy == null ? new ApplicationsPolicyE() : applicationPolicy);
 	
-			
-			if(applicationPolicy.size() > 0) {
-				homeModel.addObject("managedConfigurationMap", applicationPolicy.get(0).getManagedConfigurationMap());
+			List<ManagedConfigurationTemplateE> tp = templateIdRepository.findAll(); 
+			if(applicationPolicy.size() > 0 && tp.size() > 0) {
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", applicationPolicy.get(0).getAccessibleTrackIds());
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
-//				homeModel.addObject("applicationPolicyPermission", applicationPolicy.get(0).getPermission());
-				List<TemplatePolicy> tp = templateIdRepository.findAll(); 
-				TemplatePolicy latestTemplatePolicy = tp.get(tp.size() - 1);
-				homeModel.addObject("applicationPolicyTemplateId", latestTemplatePolicy);
-				homeModel.addObject("applicationPolicyManagedConfigVariable", latestTemplatePolicy);
-//				homeModel.addObject("applicationPolicyPermissionGrantsStates", applicationPolicy.get(0).getPolicy());
+				
+				ManagedConfigurationTemplateE latestTemplatePolicy = tp.get(tp.size() - 1);//Here's where the IOB error is when there is no data in the db yet
+				homeModel.addObject("applicationPolicyTemplateId", latestTemplatePolicy.getTemplateId());
+				homeModel.addObject("applicationPolicyManagedConfigVariable", latestTemplatePolicy.getConfigurationVariables());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(applicationPolicy.get(0).getDelegatedScopes()));
-			}else {
+			}else if(applicationPolicy.size() <= 0){
 				homeModel.addObject("managedConfigurationMap", new HashMap<>());
 				homeModel.addObject("applicationPolicyDisabled", Boolean.valueOf(true));
 				homeModel.addObject("applicationPolicyMinimumVersionCode", Integer.valueOf(-1));
-//				homeModel.addObject("applicationPolicyPermission", "");
-//				homeModel.addObject("applicationPolicyPermissionGrantsStates", "");
-				homeModel.addObject("applicationPolicyTemplateId", new TemplatePolicy());
+				homeModel.addObject("applicationPolicyTemplateId", new ManagedConfigurationTemplateE());
 				homeModel.addObject("applicationPolicyManagedConfigVariable", new HashMap<>());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(new ArrayList<>()));
 				homeModel.addObject("applicationPolicyAccessibleTrackIds", new ArrayList<>());
