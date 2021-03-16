@@ -11,6 +11,8 @@ public interface ManagedConfigurationTemplateRepository {
     Long save(ManagedConfigurationTemplateE templatePolicy);
 
     Long update(ManagedConfigurationTemplateE templatePolicy);
+    
+    ManagedConfigurationTemplateE findByApplicationId(Long applicationPolicyId); 
 
     void deleteByTemplateId(String templateId);
     

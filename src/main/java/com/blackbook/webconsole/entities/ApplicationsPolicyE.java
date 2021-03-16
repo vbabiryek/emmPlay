@@ -17,13 +17,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Component;
 
 import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
+import com.blackbook.webconsole.repositories.ManagedConfigurationTemplateRepository;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Application_Policy")
+@Component
 public class ApplicationsPolicyE extends AuditModel{
 
 	/**
@@ -43,10 +47,17 @@ public class ApplicationsPolicyE extends AuditModel{
 	private Boolean disabled;
 	private Integer minimumVersionCode;
 	
+	
+	//because it's rdbms its connected through relations independent of each other
+	//directly controlled by the user - jdbc
+	//needs a getter method to retrieve the entire managedConfigTemplate jdbc template object - can be injected
 	@Transient
 	private ManagedConfigurationTemplateE managedConfigurationTemplate;
 	
-
+	@JsonIgnore
+	@Transient
+	private static ManagedConfigurationTemplateRepository templateIdRepository;
+	
 	@ElementCollection
 	private List<String> delegatedScopes;
 	
@@ -141,12 +152,26 @@ public class ApplicationsPolicyE extends AuditModel{
 		this.accessibleTrackIds = accessibleTrackIds;
 	}
 
+	//needs jdbc query to get the injection of the jdbc template
+	//used for jdbc UI json so when viewed as a json result, it needs to access views from db
+	//when sending values from UI form to the java layer so it's saved, we need to use the mc template in UI form
+	//by using this getter method
 	public ManagedConfigurationTemplateE getManagedConfigurationTemplate() {
-		return managedConfigurationTemplate;
+		return templateIdRepository.findByApplicationId(1L);
+	}
+	
+	//handles the ui view so when it's going to the db and send info from the forms, it works
+	public ManagedConfigurationTemplateE getManagedConfigurationView() {
+		return this.managedConfigurationTemplate;
 	}
 
 	public void setManagedConfigurationTemplate(ManagedConfigurationTemplateE managedConfigurationTemplate) {
 		this.managedConfigurationTemplate = managedConfigurationTemplate;
+	}
+	
+	@Autowired
+	public void setTemplateIdRepository(ManagedConfigurationTemplateRepository templateIdRepository) {
+		ApplicationsPolicyE.templateIdRepository = templateIdRepository;
 	}
 
 }

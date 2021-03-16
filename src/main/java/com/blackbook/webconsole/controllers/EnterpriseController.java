@@ -310,9 +310,11 @@ public class EnterpriseController {
 			response.add(applicationRepo.save(pol));
 			//saving via jdbc not jpa, saving must occur just like this!
 			//application policy id is an external id that is supplied outside of this class so it must be set here because it is not generated
-			applicationsForm.getManagedConfigurationTemplate().setApplicationPolicyId(1L);
-			templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
-			templateIdRepository.save(applicationsForm.getManagedConfigurationTemplate());
+			//if there is an existing template id inside of the db, it needs to be deleted
+			if(applicationsForm.getManagedConfigurationTemplate() != null) {
+				templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
+			}
+			templateIdRepository.save(applicationsForm.getManagedConfigurationView());
 		}else {
 			//add a new applications object
 			
@@ -326,9 +328,10 @@ public class EnterpriseController {
 			response.add(applicationRepo.save(applicationsForm));
 			//this takes the data, tells it who the parent is and saves it in the repo
 			//saving via jdbc not jpa, saving must occur just like this!
-			applicationsForm.getManagedConfigurationTemplate().setApplicationPolicyId(1L);
-			templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
-			templateIdRepository.save(applicationsForm.getManagedConfigurationTemplate());
+			if(applicationsForm.getManagedConfigurationTemplate() != null) {
+				templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
+			}
+			templateIdRepository.save(applicationsForm.getManagedConfigurationView());
 		}
 		}
 		return response;

@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 public class ManagedConfigurationTemplateE implements Serializable{
 	
@@ -15,7 +17,9 @@ public class ManagedConfigurationTemplateE implements Serializable{
 	 */
 	private static final long serialVersionUID = 6239168042362114745L;
 
+	@JsonIgnore
 	private Long id;
+	@JsonIgnore
 	private Long applicationPolicyId;
 	
 	private String templateId;

@@ -80,9 +80,9 @@ public class EnterpriseService implements EnterpriseI {
 	private String APP_NAME = "Viv";
 	public static String ENTERPRISE_TOKEN;
 	public static String ENROLLMENT_TOKEN;
-	private String POLICY_ID = "policyB";
+	private String POLICY_ID = "Fully Managed Policy";
 	private HashMap<String, String> hm = new HashMap<>();
-	private HashMap<String, String> managedConfigMap = new HashMap<>();
+//	private HashMap<String, String> managedConfigMap = new HashMap<>();
 	private static final Logger LOG = LoggerFactory.getLogger(EnterpriseService.class);
 	private List<Device> listOfDevices = new ArrayList<>();
 	@Autowired
@@ -187,6 +187,7 @@ public class EnterpriseService implements EnterpriseI {
 				setPolicy(enterpriseName, POLICY_ID, getPolicy());
 //				androidManagementClient.enterprises().devices();
 				LOG.info("enterpriseName in getEnterpriseByToken is: " + enterpriseName);
+				LOG.info("policy has been set in getEnterpriseByToken()");
 				return enterprise;
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -212,6 +213,7 @@ public class EnterpriseService implements EnterpriseI {
 
 				// Set the policy to be used by the device.
 				setPolicy(enterpriseName, POLICY_ID, getPolicy());
+				LOG.info("policy has been set here in getDevices()");
 				LOG.info("enterpriseName is: " + enterpriseName);
 
 				List<Device> devices = listDevices(enterpriseName);
@@ -249,6 +251,7 @@ public class EnterpriseService implements EnterpriseI {
 			applications.add(appPolicy);
 		}
 
+		LOG.info("application policy is: " + applications);
 		return new Policy().setPermissionGrants(getPermissionGrants(1L)).setSystemUpdate(getSystemUpdatePolicy(1L))
 				.setPasswordRequirements(getPasswordRequirements(1L))
 				.setAdvancedSecurityOverrides(getAdvancedSecurityOverrides(1L))

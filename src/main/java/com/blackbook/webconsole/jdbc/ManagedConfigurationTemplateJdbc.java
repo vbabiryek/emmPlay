@@ -143,4 +143,13 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
 		
 	}
 
+	@Override
+	public ManagedConfigurationTemplateE findByApplicationId(Long applicationPolicyId) {
+		// TODO Auto-generated method stub
+		if(findAll().size() == 0) { //in the event that the db is null it will return null else it will grab the first applicationPolicyId
+			return null;
+		}
+		return findAll().get(0);
+	}
+
 }
