@@ -298,7 +298,6 @@ public class EnterpriseController {
 			pol.setDefaultPermissionPolicy(applicationsForm.getDefaultPermissionPolicy());
 			pol.setDisabled(applicationsForm.getDisabled());
 			pol.setMinimumVersionCode(applicationsForm.getMinimumVersionCode());
-//			pol.setManagedConfigurationMap(applicationsForm.getManagedConfigurationMap());
 			pol.setDelegatedScopes(applicationsForm.getDelegatedScopes());
 			
 			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
@@ -319,12 +318,12 @@ public class EnterpriseController {
 			//add a new applications object
 			
 			applicationsForm.setPolicyE(policyRepo.findById(1L).get());
-			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
-			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
-				x.setApplicationPolicy(applicationsForm);
-				return x;
-			}).collect(Collectors.toList());
-			applicationsForm.setAccessibleTrackIds(accessibleTrackIds);
+//			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
+//			accessibleTrackIds = accessibleTrackIds.stream().map(x -> { 
+//				x.setApplicationPolicy(applicationsForm);
+//				return x;
+//			}).collect(Collectors.toList());
+//			applicationsForm.setAccessibleTrackIds(accessibleTrackIds);
 			response.add(applicationRepo.save(applicationsForm));
 			//this takes the data, tells it who the parent is and saves it in the repo
 			//saving via jdbc not jpa, saving must occur just like this!

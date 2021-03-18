@@ -245,7 +245,7 @@ public class EnterpriseService implements EnterpriseI {
 			ApplicationPolicy appPolicy = new ApplicationPolicy().setPackageName(result.getPackageName())
 					.setInstallType(result.getInstallType())
 					.setDefaultPermissionPolicy(result.getDefaultPermissionPolicy())
-//					.setManagedConfiguration(result.getManagedConfigurationMap())
+					.setDelegatedScopes(result.getDelegatedScopes())
 					.setManagedConfigurationTemplate(getManagedConfigurationTemplate())
 					.setDisabled(result.getDisabled());
 			applications.add(appPolicy);

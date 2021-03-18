@@ -60,8 +60,6 @@ public class HomeController {
 			homeModel.addObject("debuggingPolicy", currentPolicyE.getUsbDebuggingPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getUsbDebuggingPolicy());
 			homeModel.addObject("safeBootPolicy", currentPolicyE.getSafeBoot() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getSafeBoot());
 			homeModel.addObject("appAutoUpdatePolicy", currentPolicyE.getAppUpdate() == null ? new AppAutoUpdatePolicyE() : currentPolicyE.getAppUpdate());
-//			homeModel.addObject("permission", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPermission());
-//			homeModel.addObject("policy", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm().getPolicy());
 			List<ApplicationsPolicyE> applicationPolicy = currentPolicyE.getApplicationPolicy();
 			homeModel.addObject("applicationPolicies", applicationPolicy == null ? new ApplicationsPolicyE() : applicationPolicy);
 	
