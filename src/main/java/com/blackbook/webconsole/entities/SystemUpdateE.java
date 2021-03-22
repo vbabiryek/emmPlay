@@ -1,21 +1,19 @@
 package com.blackbook.webconsole.entities;
 
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Type;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.blackbook.webconsole.pojo.FreezePeriodE;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -32,9 +30,10 @@ public class SystemUpdateE extends AuditModel{
 	private String type;
 	private Integer startMin;
 	private Integer endMin;
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate startFreezePeriod;
-	private LocalDate endFreezePeriod;
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "systemUpdatePolicyE")
+	private List<FreezePeriodE> freezePeriodE;
+	
 	@JsonIgnore
 	@OneToOne(fetch = FetchType.LAZY, optional = false) // bi-directional relationship
 	@JoinColumn(name = "id", nullable = false)
@@ -88,20 +87,20 @@ public class SystemUpdateE extends AuditModel{
 		this.endMin = endMin;
 	}
 
-	public LocalDate getStartFreezePeriod() {
-		return startFreezePeriod;
+
+	public List<FreezePeriodE> getFreezePeriodE() {
+		return freezePeriodE;
 	}
 
-	public void setStartFreezePeriod(LocalDate startFreezePeriod) {
-		this.startFreezePeriod = startFreezePeriod;
+	public void setFreezePeriodE(List<FreezePeriodE> freezePeriodE) {
+		this.freezePeriodE = freezePeriodE;
 	}
 
-	public LocalDate getEndFreezePeriod() {
-		return endFreezePeriod;
+	@Override
+	public String toString() {
+		return "SystemUpdateE [id=" + id + ", type=" + type + ", startMin=" + startMin + ", endMin=" + endMin
+				+ ", freezePeriodE=" + freezePeriodE + ", policyE=" + policyE + "]";
 	}
-
-	public void setEndFreezePeriod(LocalDate endFreezePeriod) {
-		this.endFreezePeriod = endFreezePeriod;
-	}
+	
 
 }

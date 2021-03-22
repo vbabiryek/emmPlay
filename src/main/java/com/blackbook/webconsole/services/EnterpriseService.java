@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.apache.el.stream.Stream;
 import org.json.JSONObject;
@@ -28,9 +29,11 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.pojo.FreezePeriodE;
 import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
 import com.blackbook.webconsole.repositories.DebuggingRepository;
+import com.blackbook.webconsole.repositories.FreezePeriodRepositoryE;
 import com.blackbook.webconsole.repositories.PasswordRepository;
 import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
@@ -51,6 +54,7 @@ import com.google.api.services.androidmanagement.v1.model.AdvancedSecurityOverri
 import com.google.api.services.androidmanagement.v1.model.ApplicationPolicy;
 import com.google.api.services.androidmanagement.v1.model.BlockAction;
 import com.google.api.services.androidmanagement.v1.model.Command;
+import com.google.api.services.androidmanagement.v1.model.Date;
 import com.google.api.services.androidmanagement.v1.model.Device;
 import com.google.api.services.androidmanagement.v1.model.EnrollmentToken;
 import com.google.api.services.androidmanagement.v1.model.Enterprise;
@@ -97,7 +101,8 @@ public class EnterpriseService implements EnterpriseI {
 	AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
 	AppAutoUpdateRepository appUpdateRepo;
-
+	@Autowired
+	FreezePeriodRepositoryE freezeRepo;
 	@Autowired
 	DebuggingRepository debugRepo;
 	@Autowired
@@ -446,9 +451,32 @@ public class EnterpriseService implements EnterpriseI {
 			systemUpdate.setStartMinutes(result.getStartMin());
 			systemUpdate.setEndMinutes(result.getEndMin());
 			systemUpdate.setType(result.getType());
+			systemUpdate.setFreezePeriods(getFreezePeriods(1L));
 			return systemUpdate;
 		}
 		return null;
+	}
+
+	//This method needs to set the startDate and endDate objects for the FreezePeriod arrayList.
+	private List<FreezePeriod> getFreezePeriods(Long id) {
+		Optional<FreezePeriodE> freezePeriods = freezeRepo.findById(id);
+		//Automatically converts all to a list
+		List<FreezePeriod> freezePeriod = freezePeriods.stream().map(EnterpriseService::mappedToFreezePeriodAndroid).collect(Collectors.toList());
+		return freezePeriod;
+	}
+	
+	//takes in a freezeperiodE and converts it to the freezeperiod in amapi - completes the map for this
+	public static FreezePeriod mappedToFreezePeriodAndroid(FreezePeriodE freezePeriode) {
+		Date startingDate = new Date();
+		startingDate.setMonth(freezePeriode.getStartMonth());
+		startingDate.setDay(freezePeriode.getEndDay());
+		Date endingDate = new Date();
+		endingDate.setMonth(freezePeriode.getEndMonth());
+		endingDate.setDay(freezePeriode.getEndMonth());
+		FreezePeriod freezePeriods = new FreezePeriod();
+		freezePeriods.setStartDate(startingDate);
+		freezePeriods.setEndDate(endingDate);
+		return freezePeriods;
 	}
 
 	@Override

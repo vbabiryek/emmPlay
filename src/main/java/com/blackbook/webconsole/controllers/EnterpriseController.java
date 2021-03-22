@@ -29,9 +29,11 @@ import com.blackbook.webconsole.entities.PasswordRequirementsE;
 import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.pojo.FreezePeriodE;
 import com.blackbook.webconsole.repositories.AdvancedSecurityOverridesRepository;
 import com.blackbook.webconsole.repositories.AppAutoUpdateRepository;
 import com.blackbook.webconsole.repositories.ApplicationRepository;
+import com.blackbook.webconsole.repositories.FreezePeriodRepositoryE;
 import com.blackbook.webconsole.repositories.PasswordRepository;
 import com.blackbook.webconsole.repositories.PermissionPolicyRepository;
 import com.blackbook.webconsole.repositories.PolicyEnforcementRulesRepository;
@@ -63,6 +65,8 @@ public class EnterpriseController {
 	private AdvancedSecurityOverridesRepository advancedSecurityOverridesRepo;
 	@Autowired
 	public PolicyEnforcementRulesRepository policyEnforcementPolicyRepo;
+	@Autowired
+	public FreezePeriodRepositoryE freezePeriodRepo;
 	@Autowired
 	public ApplicationRepository applicationRepo;
 	@Autowired
@@ -159,12 +163,22 @@ public class EnterpriseController {
 			systemUpdatePolicy.setType(systemUpdateForm.getType());
 			systemUpdatePolicy.setStartMin(systemUpdateForm.getStartMin());
 			systemUpdatePolicy.setEndMin(systemUpdateForm.getEndMin());
-			systemUpdatePolicy.setStartFreezePeriod(systemUpdateForm.getStartFreezePeriod());
-			systemUpdatePolicy.setEndFreezePeriod(systemUpdateForm.getEndFreezePeriod());
+			systemUpdatePolicy.setFreezePeriodE(systemUpdateForm.getFreezePeriodE());
+			systemUpdateForm.getFreezePeriodE().forEach(x -> {
+				x.setSystemUpdatePolicyE(systemUpdateRepo.findById(1L).get());
+				freezePeriodRepo.save(x);
+			});
 			return systemUpdateRepo.save(systemUpdatePolicy);
 		} else {
-			return systemUpdateRepo.save(systemUpdateForm);
+			SystemUpdateE systemUpdateE = systemUpdateRepo.save(systemUpdateForm);
+			List<FreezePeriodE> modifiedFreezePeriods = systemUpdateForm.getFreezePeriodE().stream().map(x -> { 
+				FreezePeriodE fpe = x.setSystemUpdatePolicyE(systemUpdateRepo.findById(1L).get());
+				return fpe;
+			}).collect(Collectors.toList());
+			modifiedFreezePeriods.forEach(x -> freezePeriodRepo.save(x));
+			return systemUpdateE;
 		}
+		
 	}
 
 	@RequestMapping(value = Urls.GET_SYSTEM_UPDATE, method = RequestMethod.GET)

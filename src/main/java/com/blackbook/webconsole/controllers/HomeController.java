@@ -25,6 +25,7 @@ import com.blackbook.webconsole.entities.PermissionPolicyE;
 import com.blackbook.webconsole.entities.PolicyE;
 import com.blackbook.webconsole.entities.PolicyEnforcementRulesE;
 import com.blackbook.webconsole.entities.SystemUpdateE;
+import com.blackbook.webconsole.pojo.FreezePeriodE;
 import com.blackbook.webconsole.pojo.ManagedConfigurationTemplateE;
 import com.blackbook.webconsole.repositories.PolicyRepository;
 import com.blackbook.webconsole.repositories.ManagedConfigurationTemplateRepository;
@@ -56,6 +57,8 @@ public class HomeController {
 			homeModel.addObject("permissionPolicy", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm());
 			homeModel.addObject("policyEnforcementRulesPolicy", currentPolicyE.getPolicyEnforeRules() == null ? new PolicyEnforcementRulesE() : currentPolicyE.getPolicyEnforeRules());
 			homeModel.addObject("systemUpdatePolicy", currentPolicyE.getSystemUp() == null ? new SystemUpdateE() : currentPolicyE.getSystemUp());
+			homeModel.addObject("freezePeriods", currentPolicyE.getSystemUp() == null ? currentPolicyE.getSystemUp().getFreezePeriodE() == null ? new ArrayList<FreezePeriodE> () : currentPolicyE.getSystemUp().getFreezePeriodE() : currentPolicyE.getSystemUp().getFreezePeriodE());
+			//if condition to check if the system update is null first then the freezeperiod is null then get the values
 			homeModel.addObject("advancedSecurityOverridesPolicy", currentPolicyE.getAdvancedSecurityOverridesEPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getAdvancedSecurityOverridesEPolicy());
 			homeModel.addObject("debuggingPolicy", currentPolicyE.getUsbDebuggingPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getUsbDebuggingPolicy());
 			homeModel.addObject("safeBootPolicy", currentPolicyE.getSafeBoot() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getSafeBoot());

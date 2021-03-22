@@ -82,9 +82,61 @@ function openModal(form_type) {
 
 }
 
+
+		
+	$(".fpRow").each(function(index) {
+		var freezePeriodObj = {};
+		var id = $(this).attr("freezePeriodPolicyId");
+		if (id != undefined) {
+			freezePeriodObj.id = id;
+		}
+		$(this).find("input").each(function(index) {
+			switch (index) {
+				case 0:// startMonth
+					freezePeriodObj["startMonth"] = $(this).val();
+					break;
+				case 1:// startDay
+					freezePeriodObj["startDay"] = $(this).val();
+					break;
+				case 2:// endMonth
+					freezePeriodObj["endMonth"] = $(this).val();
+					break;
+				case 3:// endDay
+					freezePeriodObj["endDay"] = $(this).val();
+					
+			}
+		});
+		freezePeriods.push(freezePeriodObj);// creates an array of multiple
+	});
+
+$("#addMoreFreezePeriods").click(function(e) {
+	e.preventDefault();
+	var currentStartMonth = $("#newStartMonth").val();
+	var currentStartDay = $("#newStartDay").val();
+	var currentEndMonth = $("#newEndMonth").val();
+	var currentEndDay = $("#newEndDay").val();
+
+	$("#fp-new-row").before(`<tr class="fpRow">
+									<td><input type="text" class="form-control" 
+											value="${currentStartMonth}"></td>
+									<td><input type="text" class="form-control"
+											value="${currentStartDay}"></td>
+									<td><input type="text" class="form-control"
+											value="${currentEndMonth}"></td>
+									<td><input type="text" class="form-control"
+									value="${currentEndDay}"></td>
+											</tr>`);
+
+	$("#newStartMonth").val("");
+	$("#newStartDay").val("");
+	$("#newEndMonth").val("");
+	$("#newEndDay").val("");
+});
+
 $("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, #advancedSecurityForm, #appUpdateForm").submit(function(event) {
 	event.preventDefault();
 	var post_url = $(this).attr("action");
+	var sys_update_post_url = $(this).attr("action");
 	var unindexed_array = $(this).serializeArray();
 	var indexed_array = {};
 
@@ -93,7 +145,7 @@ $("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, 
 	});										// submission
 
 	$.ajax({
-		url: post_url, contentType: 'application/json', dataType: 'json', data: JSON.stringify(indexed_array),
+		url: post_url, sys_update_post_url, contentType: 'application/json', dataType: 'json', data: JSON.stringify(indexed_array),
 		type: 'POST',
 		success: function(data, textStatus, jqXHR) {
 			window.location.assign("https://localhost:8443");
@@ -138,10 +190,8 @@ $("#applicationsForm").submit(function(event) {
 		});
 		accessibleTrackIds.push(appTrackInfoObj);
 	});
-
 	
-
-
+	
 	$(".apRow").each(function(index) {
 		var applicationObj = {};
 		var id = $(this).attr("applicationpolicyid");

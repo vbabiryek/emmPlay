@@ -539,23 +539,60 @@
 													<option value="POSTPONE">
 												</datalist>
 												<label for="start">Start Minutes</label> <input type="text"
-													class="form-control" id="systemUpdateStartMin"
+													class="form-control" id="startMinutes"
 													placeholder="Enter start minutes" name="startMin"
 													value="${systemUpdatePolicy.getStartMin()}"> <label
 													for="end">End Minutes</label> <input type="text"
-													class="form-control" id="systemUpdateEndMin"
+													class="form-control" id="endMinutes"
 													placeholder="Enter end minutes" name="endMin"
-													value="${systemUpdatePolicy.getEndMin()}"> <label
-													for="startFreeze">Start Freeze Period</label> <input
-													type="text" class="form-control"
-													id="systemUpdateStartFreezePeriod"
-													placeholder="Enter freeze period" name="startFreezePeriod"
-													value="${systemUpdatePolicy.getStartFreezePeriod()}">
-												<label for="endFreeze">End Freeze Period</label> <input
-													type="text" class="form-control"
-													id="systemUpdateEndFreezePeriod"
-													placeholder="Enter freeze period" name="endFreezePeriod"
-													value="${systemUpdatePolicy.getEndFreezePeriod()}">
+													value="${systemUpdatePolicy.getEndMin()}"> 
+													<table class="table">
+														<thead>
+															<tr>
+																<th>StartMonth</th>
+																<th>StartDay</th>
+																<th>EndMonth</th>
+																<th>EndDay</th>
+															</tr>
+														</thead>
+													<tbody id="freezePeriodPolicyTable">
+													<c:forEach items="${freezePeriods}" var="freezePeriodPolicy">
+														<tr class="fpRow" freezePeriodPolicyId = "${freezePeriods.getId()}">
+																<td><input type="text" class="form-control"
+																id="fp-${freezePeriods.getId()}-startMonth" name="ap-${freezePeriods.freezePeriods.getId()}-startMonth"
+																value="${freezePeriods.getStartMonth()}" ></td>
+																<td><input type="text" class="form-control"
+																id="fp-${freezePeriods.getId()}-startDay" name="ap-${freezePeriods.getId()}-startDay"
+																value="${freezePeriods.getStartDay()}"></td>
+																<td><input type="text" class="form-control"
+																id="fp-${freezePeriods.getId()}-endMonth" name="ap-${freezePeriods.getId()}-endMonth"
+																value="${freezePeriods.getEndMonth()}"></td>
+																<td>
+																<td><input type="text" class="form-control"
+																id="fp-${freezePeriods.getId()}-endDay" name="ap-${freezePeriods.getId()}-endDay"
+																value="${freezePeriods.getEndDay()}"></td>
+														</tr>
+													</c:forEach>
+													<tr id="fp-new-row">
+																		<td><input type="text" class="form-control"
+																		id="newStartMonth" name="fp-newStartMonth"
+																		value=""></td>
+																		<td><input type="text" class="form-control"
+																		id="newStartDay" name="fp-newStartDay"
+																		value=""></td>
+																		<td><input type="text" class="form-control"
+																		id="newEndMonth" name="fp-newEndMonth"
+																		value=""></td>
+																		<td><input type="text" class="form-control"
+																		id="newEndDay" name="fp-newEndDay"
+																		value=""></td>
+																		<td>
+																		<!-- <button type="button" class="deletebtn" onclick = "uninstall()" title="Remove row">Uninstall</button> -->
+																		</td>
+																</tr>
+														</tbody>
+														</table>
+														<button id="addMoreFreezePeriods">Add another Freeze Period</button>
 											</div>
 											
 											<button type="submit" class="btn btn-default">Submit</button>
