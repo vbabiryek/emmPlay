@@ -164,6 +164,7 @@ public class EnterpriseController {
 			systemUpdatePolicy.setStartMin(systemUpdateForm.getStartMin());
 			systemUpdatePolicy.setEndMin(systemUpdateForm.getEndMin());
 			systemUpdatePolicy.setFreezePeriodE(systemUpdateForm.getFreezePeriodE());
+			LOG.info("freezePeriods here are: " + systemUpdateForm.getFreezePeriodE());
 			systemUpdateForm.getFreezePeriodE().forEach(x -> {
 				x.setSystemUpdatePolicyE(systemUpdateRepo.findById(1L).get());
 				freezePeriodRepo.save(x);

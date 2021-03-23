@@ -559,17 +559,17 @@
 													<c:forEach items="${freezePeriods}" var="freezePeriodPolicy">
 														<tr class="fpRow" freezePeriodPolicyId = "${freezePeriods.getId()}">
 																<td><input type="text" class="form-control"
-																id="fp-${freezePeriods.getId()}-startMonth" name="ap-${freezePeriods.freezePeriods.getId()}-startMonth"
+																id="fp-${freezePeriods.getId()}-startMonth" name="fp-${freezePeriods.freezePeriods.getId()}-startMonth"
 																value="${freezePeriods.getStartMonth()}" ></td>
 																<td><input type="text" class="form-control"
-																id="fp-${freezePeriods.getId()}-startDay" name="ap-${freezePeriods.getId()}-startDay"
+																id="fp-${freezePeriods.getId()}-startDay" name="fp-${freezePeriods.getId()}-startDay"
 																value="${freezePeriods.getStartDay()}"></td>
 																<td><input type="text" class="form-control"
-																id="fp-${freezePeriods.getId()}-endMonth" name="ap-${freezePeriods.getId()}-endMonth"
+																id="fp-${freezePeriods.getId()}-endMonth" name="fp-${freezePeriods.getId()}-endMonth"
 																value="${freezePeriods.getEndMonth()}"></td>
 																<td>
 																<td><input type="text" class="form-control"
-																id="fp-${freezePeriods.getId()}-endDay" name="ap-${freezePeriods.getId()}-endDay"
+																id="fp-${freezePeriods.getId()}-endDay" name="fp-${freezePeriods.getId()}-endDay"
 																value="${freezePeriods.getEndDay()}"></td>
 														</tr>
 													</c:forEach>

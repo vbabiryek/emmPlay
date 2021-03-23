@@ -35,7 +35,7 @@ public class FreezePeriodE extends AuditModel{
 	private Integer endDay;
 	
 	@JsonIgnore
-	@JoinColumn(name = "system_update_policy_id", nullable = false)
+	@JoinColumn(name = "sys_update_id", nullable = false)
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private SystemUpdateE systemUpdatePolicyE;
 	

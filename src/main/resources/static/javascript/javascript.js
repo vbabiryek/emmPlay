@@ -82,31 +82,35 @@ function openModal(form_type) {
 
 }
 
-
+	$("#systemUpdateForm").submit(function(event){
+		event.preventDefault();
+		var freezePeriods = [];
 		
-	$(".fpRow").each(function(index) {
-		var freezePeriodObj = {};
-		var id = $(this).attr("freezePeriodPolicyId");
-		if (id != undefined) {
-			freezePeriodObj.id = id;
-		}
-		$(this).find("input").each(function(index) {
-			switch (index) {
-				case 0:// startMonth
-					freezePeriodObj["startMonth"] = $(this).val();
-					break;
-				case 1:// startDay
-					freezePeriodObj["startDay"] = $(this).val();
-					break;
-				case 2:// endMonth
-					freezePeriodObj["endMonth"] = $(this).val();
-					break;
-				case 3:// endDay
-					freezePeriodObj["endDay"] = $(this).val();
-					
+		$(".fpRow").each(function(index) {
+			var freezePeriodObj = {};
+			var id = $(this).attr("freezePeriodPolicyId");
+			if (id != undefined) {
+				freezePeriodObj.id = id;
 			}
+			$(this).find("input").each(function(index) {
+				switch (index) {
+					case 0:// startMonth
+						freezePeriodObj["startMonth"] = $(this).val();
+						break;
+					case 1:// startDay
+						freezePeriodObj["startDay"] = $(this).val();
+						break;
+					case 2:// endMonth
+						freezePeriodObj["endMonth"] = $(this).val();
+						break;
+					case 3:// endDay
+						freezePeriodObj["endDay"] = $(this).val();
+						break;
+				}
+			});
+			freezePeriods.push(freezePeriodObj);// creates an array of multiple
+			console.log("freezePeriods are: " + freezePeriods);
 		});
-		freezePeriods.push(freezePeriodObj);// creates an array of multiple
 	});
 
 $("#addMoreFreezePeriods").click(function(e) {
@@ -136,7 +140,6 @@ $("#addMoreFreezePeriods").click(function(e) {
 $("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, #advancedSecurityForm, #appUpdateForm").submit(function(event) {
 	event.preventDefault();
 	var post_url = $(this).attr("action");
-	var sys_update_post_url = $(this).attr("action");
 	var unindexed_array = $(this).serializeArray();
 	var indexed_array = {};
 
@@ -145,7 +148,7 @@ $("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, 
 	});										// submission
 
 	$.ajax({
-		url: post_url, sys_update_post_url, contentType: 'application/json', dataType: 'json', data: JSON.stringify(indexed_array),
+		url: post_url, contentType: 'application/json', dataType: 'json', data: JSON.stringify(indexed_array),
 		type: 'POST',
 		success: function(data, textStatus, jqXHR) {
 			window.location.assign("https://localhost:8443");
