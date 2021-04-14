@@ -23,9 +23,8 @@ import com.mysql.cj.jdbc.exceptions.SQLError;
 @Repository
 public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTemplateRepository{
 	
-	// NOTE: When DB is dropped it is necessary to drop these tables manually using the SQL queries inside of MySQL workbench!
+	//When DB is dropped it is necessary to drop these tables manually, check MySQL queries for manual drop
 	
-	//constants
 	private final static String INSERT_TEMPLATE_ID = "insert into managedConfigurationTemplate (application_policy_id,template_id) values(:application_policy_id,:template_id)";
 	private final static String INSERT_CONFIGURATION_VARIABLES = "insert into configuration_variables (template_id, configuration_key, configuration_val) values(:template_id,:configuration_key,:configuration_val)";
 	private final static String DELETE_TEMPLATE_ID = "delete from managedConfigurationTemplate where template_id = :template_id";
@@ -79,7 +78,7 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
 	public void deleteByTemplateId(String templateId) {
 		// TODO Auto-generated method stub
 		if(templateId != null) {
-			//dependency has to be deleted before you can delete the parent
+			//dependency has to be deleted before you can delete the parent (child parent relationship here - culprit for foreign keys)
 			namedParameterJdbcTemplate.update(DELETE_CONFIGURATION_VARIABLES, new MapSqlParameterSource("template_id", templateId));
 			namedParameterJdbcTemplate.update(DELETE_TEMPLATE_ID, new MapSqlParameterSource("template_id", templateId));
 		}
@@ -93,7 +92,7 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
 
 	@Override
 	public List<ManagedConfigurationTemplateE> findAll() {
-		// Takes the data that it gets from each row and creates an object. 
+		// creates an object from each row 
 		List<ManagedConfigurationTemplateE> templateList = new ArrayList<>();
 				namedParameterJdbcTemplate
 				.query(SELECT_ALL_TEMPLATES, (rs, rowNum) ->
@@ -103,7 +102,7 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
                         rs.getString("template_id")
                 )));
 				for(ManagedConfigurationTemplateE t : templateList) {
-					setConfigVariablesForTemplatePolicy(t);//sets the config variables for this template
+					setConfigVariablesForTemplatePolicy(t);//sets the config variables for this template here
 				}
 				LOG.info("finding all templates");
 		return templateList;
@@ -127,14 +126,14 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
 	private ManagedConfigurationTemplateE setConfigVariablesForTemplatePolicy(ManagedConfigurationTemplateE tp) {
 		namedParameterJdbcTemplate.query(SELECT_CONFIGURATION_VARIABLES_BY_TEMPLATE_ID, 
 				new MapSqlParameterSource("template_id", tp.getTemplateId()), (ResultSet resultSet) -> { //callback that returns after execution of query
-			Map<String, String> resultMap = new HashMap<>(); //Many rows
+			Map<String, String> resultMap = new HashMap<>(); //more than one row
 			if(resultSet.first()) {
 				resultMap.put(resultSet.getString("configuration_key"), resultSet.getString("configuration_val"));
 			}
 			while(resultSet.next()) {
 				resultMap.put(resultSet.getString("configuration_key"), resultSet.getString("configuration_val"));
 			}
-//			resultSet.close();//We don't want a memory leak
+//			resultSet.close();//to avoid memory leaks
 		 tp.setConfigurationVariables(resultMap);
 		 LOG.info("number of config variables found in db " + resultMap.size());
 		});	
@@ -146,7 +145,7 @@ public class ManagedConfigurationTemplateJdbc implements ManagedConfigurationTem
 	@Override
 	public ManagedConfigurationTemplateE findByApplicationId(Long applicationPolicyId) {
 		// TODO Auto-generated method stub
-		if(findAll().size() == 0) { //in the event that the db is null it will return null else it will grab the first applicationPolicyId
+		if(findAll().size() == 0) { //in the event that the db is null it will return null, else - it will grab the first applicationPolicyId
 			return null;
 		}
 		return findAll().get(0);

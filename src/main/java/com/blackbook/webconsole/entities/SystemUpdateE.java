@@ -31,7 +31,7 @@ public class SystemUpdateE extends AuditModel{
 	private Integer startMin;
 	private Integer endMin;
 
-	//Could this be the issue? How can we confirm that this relationship is actually set?
+	//Potential culprit for issue # 1 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "systemUpdatePolicyE")
 	private List<FreezePeriodE> freezePeriodE;
 	

@@ -38,8 +38,7 @@ function loadUrl() {
 
 /* Starts the policy scripts */
 
-function getCosuPolicy() { // needs to always point back to the policies tab on
-	// the menu or create a function that does so
+function getCosuPolicy() { 
 	$.get("/getCosuPolicy", function(data) {
 		$(".main_content").html(`<p>${policyList}</p>`);
 		var html = "";
@@ -108,7 +107,7 @@ function openModal(form_type) {
 						break;
 				}
 			});
-			freezePeriods.push(freezePeriodObj);// creates an array of multiple
+			freezePeriods.push(freezePeriodObj);// creates an array of multiple objects
 			console.log("freezePeriods are: " + freezePeriods);
 		});
 	});
@@ -137,7 +136,7 @@ $("#addMoreFreezePeriods").click(function(e) {
 	$("#newEndDay").val("");
 });
 
-$("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, #advancedSecurityForm, #appUpdateForm").submit(function(event) {
+$("#policyForm, #permissionForm, #policyEnforcementRuleForm, #advancedSecurityForm, #appUpdateForm").submit(function(event) {
 	event.preventDefault();
 	var post_url = $(this).attr("action");
 	var unindexed_array = $(this).serializeArray();
@@ -159,6 +158,39 @@ $("#policyForm, #permissionForm, #systemUpdateForm, #policyEnforcementRuleForm, 
 	});
 });
 
+
+$("#systemUpdateForm").submit(function(event){
+	event.preventDefault();
+	var post_url = $(this).attr("action");
+	var unindexed_array = $(this).serializeArray();
+	var indexed_array = {}; // this indexed array is following the sys updates entity
+	var freezePeriods = [];
+	var freezePeriodsObj = {};
+
+	$.map(unindexed_array, function(n, i) {
+		if(n['name'].search("fp-new") != -1){
+			n['name'] = n['name'].replace("fp-newS", "s");
+			n['name'] = n['name'].replace("fp-newE", "e");
+			freezePeriodsObj[n['name']] = n['value'];
+		}else{
+			indexed_array[n['name']] = n['value'];
+		}
+	});										
+	
+	freezePeriods.push(freezePeriodsObj);
+	indexed_array.freezePeriodE = freezePeriods;
+
+	$.ajax({
+		url: post_url, contentType: 'application/json', dataType: 'json', data: JSON.stringify(indexed_array),
+		type: 'POST',
+		success: function(data, textStatus, jqXHR) {
+			window.location.assign("https://localhost:8443");
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("There was an error!");
+		}
+	});
+});
 
 
 $("#applicationsForm").submit(function(event) {
@@ -214,14 +246,14 @@ $("#applicationsForm").submit(function(event) {
 					break;
 			}
 		});
-		applications.push(applicationObj);// creates an array of multiple
+		applications.push(applicationObj);// creates an array of multiple objects
 		
 	});
 	
 	if(templateId !== undefined && templateId !== null){
 		let templateIdPolicyObj = {"templateId" : templateId};
 		templateIdPolicyObj.configurationVariables = {};
-		//iterating through all config variables which are part of the singular templateId policy obj.
+		//iterates through all config variables which are part of the singular templateId policy obj.
 		
 		$(".apTemplateAndConfigRow").each(function(index){
 			var managedConfigurationTemplate = {};
@@ -255,9 +287,9 @@ $("#applicationsForm").submit(function(event) {
 			// fields, just the rows
 		} else {
 			for (var i = 0; i < applications.length; i++) {
-				applications[i][n['name']] = n['value'];// modifies each obj
+				applications[i][n['name']] = n['value'];// modifying each object
 				// at a time and
-				// gives it the val
+				// giving it the value
 			}
 		}
 
@@ -293,7 +325,7 @@ $("#applicationsForm").submit(function(event) {
 
 function devices() {
 	$.get("/devices", function(data) {
-		$(".main_content").html(data.map(x => `<p>The devices listed under this enteprise are:  
+		$(".main_content").html(data.map(x => `<p>The devices listed under this enterprise are:  
 		<span class = 'deviceListUrl'> ${x.name} </span>
 		<button class = 'btn btn-warning' onclick = 'wipeDevice("${x.name}")'>Wipe Device</button>
 		<button class = 'btn btn-danger' onclick = 'relinquishOwnership("${x.name}")'>Relinquish Ownership</button>
@@ -572,7 +604,7 @@ function removeFromStorage(packageName) {
 }
 
 
-/* In case we ever want to explore this route
+/* 
 
 function uninstall(){
 	$.get("/getSilentUninstall", function(){
@@ -586,7 +618,7 @@ function uninstall(){
 
 function searchWords(htmlTag, searchWord) {//Searches for this htmltag and matching text
 	$(htmlTag).each((index, element) => {
-		if ($(element).text().search(searchWord) !== -1) { //persists the concept of strict equality - also gets the text of every span tag in the event I want to explore more for this route : )
+		if ($(element).text().search(searchWord) !== -1) { //persists the concept of "strict equality" - also gets the text of every span tag in the event I want to explore more this route
 			return true;
 		}
 	});
@@ -606,11 +638,11 @@ function addToLocalStorageArray(keyName, value) {
 function populateManagedConfigurationTable() {
 	if (localStorage.getItem("mcmId")) {
 		let data = localStorage.getItem("mcmId") || [];
-		data = typeof data === 'string' ? JSON.parse(data) : [];//because localStorage can only store Strings, this parses it from Strings into an object
+		data = typeof data === 'string' ? JSON.parse(data) : [];//because localStorage can only store Strings, I needed to parse it into an object
 		if (data.length !== 0) {
 			let header = Object.keys(data[0]);
 			let tableBody = [];
-			data.forEach(x => tableBody.push(Object.values(x))); //x = temp objects of each array
+			data.forEach(x => tableBody.push(Object.values(x))); //x = temporary objects of each array
 			let table = makeTable(header, tableBody);
 			$("#managedConfigurationTable").html(table);
 		}

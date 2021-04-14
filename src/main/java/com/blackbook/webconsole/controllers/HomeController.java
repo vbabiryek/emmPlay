@@ -45,7 +45,7 @@ public class HomeController {
 	private ManagedConfigurationTemplateRepository templateIdRepository;
 	
 	
-	//For views
+	//Views
 	@GetMapping(Urls.HOME_PAGE)
 	public ModelAndView home() {
 		ModelAndView homeModel = new ModelAndView();
@@ -57,8 +57,9 @@ public class HomeController {
 			homeModel.addObject("permissionPolicy", currentPolicyE.getPerm() == null ? new PermissionPolicyE() : currentPolicyE.getPerm());
 			homeModel.addObject("policyEnforcementRulesPolicy", currentPolicyE.getPolicyEnforeRules() == null ? new PolicyEnforcementRulesE() : currentPolicyE.getPolicyEnforeRules());
 			homeModel.addObject("systemUpdatePolicy", currentPolicyE.getSystemUp() == null ? new SystemUpdateE() : currentPolicyE.getSystemUp());
-			homeModel.addObject("freezePeriods", currentPolicyE.getSystemUp() == null ? currentPolicyE.getSystemUp().getFreezePeriodE() == null ? new ArrayList<FreezePeriodE> () : currentPolicyE.getSystemUp().getFreezePeriodE() : currentPolicyE.getSystemUp().getFreezePeriodE());
-			//if condition to check if the system update is null first then the freezeperiod is null then get the values
+//			Line 61 currently produces an NPE, need to create child parent relationship between freezePeriodsE and SystemUpdateE to resolve
+//			if condition to check if the system update is null first then the freezeperiod is null then get the values
+//			homeModel.addObject("freezePeriods", currentPolicyE.getSystemUp() == null ? currentPolicyE.getSystemUp().getFreezePeriodE() == null ? new ArrayList<FreezePeriodE> () : currentPolicyE.getSystemUp().getFreezePeriodE() : currentPolicyE.getSystemUp().getFreezePeriodE());
 			homeModel.addObject("advancedSecurityOverridesPolicy", currentPolicyE.getAdvancedSecurityOverridesEPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getAdvancedSecurityOverridesEPolicy());
 			homeModel.addObject("debuggingPolicy", currentPolicyE.getUsbDebuggingPolicy() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getUsbDebuggingPolicy());
 			homeModel.addObject("safeBootPolicy", currentPolicyE.getSafeBoot() == null ? new AdvancedSecurityOverridesE() : currentPolicyE.getSafeBoot());
@@ -72,7 +73,7 @@ public class HomeController {
 				homeModel.addObject("applicationPolicyDisabled", applicationPolicy.get(0).getDisabled());
 				homeModel.addObject("applicationPolicyMinimumVersionCode", applicationPolicy.get(0).getMinimumVersionCode());
 				
-				ManagedConfigurationTemplateE latestTemplatePolicy = tp.get(tp.size() - 1);//Here's where the IOB error is when there is no data in the db yet
+				ManagedConfigurationTemplateE latestTemplatePolicy = tp.get(tp.size() - 1);
 				homeModel.addObject("applicationPolicyTemplateId", latestTemplatePolicy.getTemplateId());
 				homeModel.addObject("applicationPolicyManagedConfigVariable", latestTemplatePolicy.getConfigurationVariables());
 				homeModel.addObject("applicationPolicyDelegatedScopes", getDelegatedScopesHtml(applicationPolicy.get(0).getDelegatedScopes()));

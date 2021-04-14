@@ -16,7 +16,7 @@ public interface ManagedConfigurationTemplateRepository {
 
     void deleteByTemplateId(String templateId);
     
-    Long deleteAllConfigVariablesByTemplateId(Long templateId); // This because we need to delete the children first.
+    Long deleteAllConfigVariablesByTemplateId(Long templateId); // This because I need to delete the children first.
     
     List<ManagedConfigurationTemplateE> findAll();
     

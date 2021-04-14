@@ -21,12 +21,12 @@ public class AdvancedSecurityOverridesE extends AuditModel{
 	private static final long serialVersionUID = 1455166446885588287L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id; // possible conjunction variable?
+	private Long id; // possible conjunction variable
 	private Boolean debuggingFeaturesAllowed;
 	private String untrustedAppsPolicy;
 	private Boolean safeBootDisabled;
 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY, optional = false) // bi-directional relationship
+	@OneToOne(fetch = FetchType.LAZY, optional = false) //this is a bi-directional relationship
 	@JoinColumn(name = "id", nullable = false)
 	private PolicyE policyE;
 	

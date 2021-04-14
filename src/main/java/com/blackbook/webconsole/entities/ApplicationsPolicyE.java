@@ -48,9 +48,9 @@ public class ApplicationsPolicyE extends AuditModel{
 	private Integer minimumVersionCode;
 	
 	
-	//because it's rdbms its connected through relations independent of each other
-	//directly controlled by the user - jdbc
-	//needs a getter method to retrieve the entire managedConfigTemplate jdbc template object - can be injected
+	//using rdbms so it's connected through relations independent of each other
+	//directly controlled by the user through jdbc
+	//will always need a getter method to retrieve the entire managedConfigTemplate jdbc template object so it can be injected
 	@Transient
 	private ManagedConfigurationTemplateE managedConfigurationTemplate;
 	
@@ -61,6 +61,7 @@ public class ApplicationsPolicyE extends AuditModel{
 	@ElementCollection
 	private List<String> delegatedScopes;
 	
+//	better practice to demonstrate the template over the managedConfig object	
 //	@Convert(converter = HashMapConverter.class)
 //	private Map<String, Object> managedConfigurationMap;
 
@@ -153,14 +154,14 @@ public class ApplicationsPolicyE extends AuditModel{
 	}
 
 	//needs jdbc query to get the injection of the jdbc template
-	//used for jdbc UI json so when viewed as a json result, it needs to access views from db
-	//when sending values from UI form to the java layer so it's saved, we need to use the mc template in UI form
-	//by using this getter method
+	//used for jdbc UI json so when viewed as a json result, it needs to access views from my db
+	//when sending values from my UI's form to the java layer so it's saved, I need to use the MC template in the UI form
+	//by using this getter method here
 	public ManagedConfigurationTemplateE getManagedConfigurationTemplate() {
 		return templateIdRepository.findByApplicationId(1L);
 	}
 	
-	//handles the ui view so when it's going to the db and send info from the forms, it works
+	//handles the ui view so when it's going to the db and sending info from the forms, it works!
 	public ManagedConfigurationTemplateE getManagedConfigurationView() {
 		return this.managedConfigurationTemplate;
 	}

@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 }
 
-/* Style the body */
+/* Styles the body */
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	margin: 0;
@@ -18,7 +18,7 @@ body {
 	color: #1abc9c;
 }
 
-/* Increase the font size of the heading */
+/* Increases the font size of the heading */
 .header h1 {
 	font-size: 40px;
 }
@@ -39,7 +39,12 @@ body {
 	width:initial !important;
 }
 
-/* Sticky navbar - toggles between relative and fixed, depending on the scroll position. It is positioned relative until a given offset position is met in the viewport - then it "sticks" in place (like position:fixed). The sticky value is not supported in IE or Edge 15 and earlier versions. However, for these versions the navbar will inherit default position */
+/* Sticky navbar - toggles between relative and fixed, 
+depending on the scroll position. It is positioned relative 
+until a given offset position is met in the viewport - then 
+it "sticks" in place (like position:fixed). The sticky value 
+is not supported in IE or Edge 15 and earlier versions. However, 
+for these versions the navbar will inherit the default position */
 .navbar {
 	overflow: hidden;
 	background-color: #333;
@@ -124,7 +129,7 @@ body {
 	flex-wrap: wrap;
 }
 
-/* Create two unequal columns that sits next to each other */
+/* Creates two unequal columns that sits next to each other */
 /* Sidebar/left column */
 .side {
 	-ms-flex: 30%; /* IE10 */
@@ -161,14 +166,16 @@ body {
 	justify-content: space-between
 }
 
-/* Responsive layout - when the screen is less than 700px wide, make the two columns stack on top of each other instead of next to each other */
+/* Responsive layout - when the screen is less than 700px wide, 
+makes the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 700px) {
 	.row {
 		flex-direction: column;
 	}
 }
 
-/* Responsive layout - when the screen is less than 400px wide, make the navigation links stack on top of each other instead of next to each other */
+/* Responsive layout - when the screen is less than 400px wide, 
+makes the navigation links stack on top of each other instead of next to each other */
 @media screen and (max-width: 400px) {
 	.navbar a {
 		float: none;
@@ -198,13 +205,13 @@ input[type=text], input[type=password] {
 	background: #f1f1f1;
 }
 
-/* Add a background color when the inputs get focus */
+/* Adds a background color when the inputs get focus */
 input[type=text]:focus, input[type=password]:focus {
 	background-color: #ddd;
 	outline: none;
 }
 
-/* Set a style for all buttons */
+/* Sets a style for all buttons */
 button {
 	background-color: #1abc9c;
 	color: white;
@@ -224,19 +231,19 @@ button:hover {
 	opacity: 1;
 }
 
-/* Extra styles for the cancel button */
+/* Extra styles for the cancel buttons */
 .cancelbtn {
 	padding: 14px 20px;
 	background-color: #f44336;
 }
 
-/* Float cancel and signup buttons and add an equal width */
+/* Floats cancel and signup buttons and adds an equal width */
 .cancelbtn, .signupbtn {
 	float: left;
 	width: 50%;
 }
 
-/* Add padding to container elements */
+/* Adds padding to container elements */
 .container {
 	padding: 16px;
 }

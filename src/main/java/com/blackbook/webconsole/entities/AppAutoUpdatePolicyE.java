@@ -27,7 +27,7 @@ public class AppAutoUpdatePolicyE extends AuditModel{
 	private String appAutoUpdatePolicy;
 	
 	@JsonIgnore
-	@OneToOne(fetch = FetchType.LAZY, optional = false) // bi-directional relationship
+	@OneToOne(fetch = FetchType.LAZY, optional = false) // this is a bi-directional relationship
 	@JoinColumn(name = "id", nullable = false)
 	private PolicyE policyE;
 

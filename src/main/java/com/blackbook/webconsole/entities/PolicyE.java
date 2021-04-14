@@ -65,7 +65,6 @@ public class PolicyE extends AuditModel {
 	private List<ApplicationsPolicyE> applicationPolicy;
 	
 
-	//	private String packageName; add getters and setters etc. 
 	private String packageName = "com.blackbook.webconsole.entities";
 
 	public PolicyE() {

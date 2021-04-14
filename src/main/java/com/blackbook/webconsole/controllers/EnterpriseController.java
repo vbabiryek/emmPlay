@@ -248,7 +248,7 @@ public class EnterpriseController {
 		return appUpdateRepo.findById(1L).isPresent() ? appUpdateRepo.findById(1L).get() : null;
 	}
 	
-// Leave this here in case you choose to go this route
+// Leaving this here in case I choose to go this route for templateId - currently not used
 	
 //	@PostMapping(value = Urls.SET_TEMPLATE_ID, consumes = {MediaType.ALL_VALUE})
 //	public TemplateIdPolicyE addTemplateIdPolicy(@RequestBody TemplateIdPolicyE templateIdForm) {
@@ -298,7 +298,7 @@ public class EnterpriseController {
 //		}	
 //	}
 	
-//	Find a way to iterate through this - known bug *one application is sent at a time
+	
 	@PostMapping(value = Urls.ADD_APPLICATION_POLICIES, consumes = {MediaType.ALL_VALUE})
 	public List<ApplicationsPolicyE> addApplicationPolicies(@RequestBody List<ApplicationsPolicyE> applicationsForms) {
 		List<ApplicationsPolicyE> response = new ArrayList<>();
@@ -307,7 +307,7 @@ public class EnterpriseController {
 		if(foundApplicationsPolicy.isPresent()) {
 			//if found in database, get it and then update it
 			ApplicationsPolicyE pol = foundApplicationsPolicy.get();
-			pol.setPolicyE(policyRepo.findById(1L).get());//automatically gets the parent and sets the parent here
+			pol.setPolicyE(policyRepo.findById(1L).get()); //I'm automatically getting the parent and setting the parent here
 			pol.setPackageName(applicationsForm.getPackageName());
 			pol.setInstallType(applicationsForm.getInstallType());
 			pol.setDefaultPermissionPolicy(applicationsForm.getDefaultPermissionPolicy());
@@ -324,13 +324,13 @@ public class EnterpriseController {
 			response.add(applicationRepo.save(pol));
 			//saving via jdbc not jpa, saving must occur just like this!
 			//application policy id is an external id that is supplied outside of this class so it must be set here because it is not generated
-			//if there is an existing template id inside of the db, it needs to be deleted
+			//if there is an existing template id inside of the db, it needs to be deleted first
 			if(applicationsForm.getManagedConfigurationTemplate() != null) {
 				templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
 			}
 			templateIdRepository.save(applicationsForm.getManagedConfigurationView());
 		}else {
-			//add a new applications object
+			//adds a new applications object
 			
 			applicationsForm.setPolicyE(policyRepo.findById(1L).get());
 //			List<AppTrackInfoE> accessibleTrackIds = applicationsForm.getAccessibleTrackIds();
@@ -340,8 +340,8 @@ public class EnterpriseController {
 //			}).collect(Collectors.toList());
 //			applicationsForm.setAccessibleTrackIds(accessibleTrackIds);
 			response.add(applicationRepo.save(applicationsForm));
-			//this takes the data, tells it who the parent is and saves it in the repo
-			//saving via jdbc not jpa, saving must occur just like this!
+			//telling data who the parent is and saving it in the repository
+			//Saving here must occur just like this through jdbc and not jpa!
 			if(applicationsForm.getManagedConfigurationTemplate() != null) {
 				templateIdRepository.deleteByTemplateId(applicationsForm.getManagedConfigurationTemplate().getTemplateId());
 			}
@@ -394,11 +394,6 @@ public class EnterpriseController {
 		
 	}
 	
-//	In case we ever want to explore this route
-//	@RequestMapping(value = Urls.UNINSTALL_APP, method = RequestMethod.GET)
-//	public Policy silentlyUninstall() {
-//		return enterpriseImpl.silentlyUninstall();
-//	}
 	
 	@RequestMapping(value = Urls.LOCK_DEVICE, method = RequestMethod.GET)
 	public Operation lockDevice(@PathVariable String enterpriseId, @PathVariable String deviceName) {

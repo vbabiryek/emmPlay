@@ -71,7 +71,10 @@ import com.google.api.services.androidmanagement.v1.model.SystemUpdate;
 import com.google.api.services.androidmanagement.v1.model.WebToken;
 import com.google.api.services.androidmanagement.v1.model.WipeAction;
 
-//Order of operations
+//Order of operations(Test):
+
+//The enterprise must be enrolled first
+//in order to access MGP, get devices (list) and potentially check for enrollment token through QR.
 
 @Service
 public class EnterpriseService implements EnterpriseI {
@@ -384,7 +387,7 @@ public class EnterpriseService implements EnterpriseI {
 					webTokenContent);
 			WebToken responseWebToken = value.execute();
 			LOG.info("value is: " + value);
-			LOG.info("webToken value is: " + responseWebToken.getValue());// Here is our webToken
+			LOG.info("webToken value is: " + responseWebToken.getValue());
 			String iframeWebToken = responseWebToken.getValue();
 			return iframeWebToken;
 		} catch (IOException e) {
@@ -396,15 +399,6 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 
-	/*
-	 * In case we ever want to explore this route
-	 * 
-	 * public Policy silentlyUninstall() { return new
-	 * Policy().setApplications(Collections.singletonList(new ApplicationPolicy()
-	 * .setInstallType("BLOCKED")));
-	 * 
-	 * }
-	 */
 
 	@Override
 	public AdvancedSecurityOverrides getAdvancedSecurityOverrides(Long id) {
@@ -457,7 +451,7 @@ public class EnterpriseService implements EnterpriseI {
 		return null;
 	}
 
-	//This method needs to set the startDate and endDate objects for the FreezePeriod arrayList.
+	//This method needs to set the startDate and endDate objects for the FreezePeriod arrayList. Issue # 1
 	private List<FreezePeriod> getFreezePeriods(Long id) {
 		Optional<FreezePeriodE> freezePeriods = freezeRepo.findById(id);
 		//Automatically converts all to a list

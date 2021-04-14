@@ -23,7 +23,6 @@ public interface EnterpriseI {
 	public Enterprise getEnterpriseByToken(String enterpriseToken);
 	public List<Device> getDevices(String enrollmentToken);
 	public Policy getPolicy();
-	//public Policy silentlyUninstall(); in case we ever want to explore this route
 	public PasswordRequirements getPasswordRequirements(Long id);
 	public void setPolicy(String enterpriseName, String policyId, Policy policy);
 	public SystemUpdate getSystemUpdatePolicy(Long id);

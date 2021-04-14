@@ -13,20 +13,20 @@ public class HashMapConverter implements AttributeConverter<Map<String, Object>,
 	private ObjectMapper objMapper = new ObjectMapper();
 
 	@Override
-	public String convertToDatabaseColumn(Map<String, Object> attribute) {//The value you're storing in the database - String value(s)
-		//ObjectMapper
+	public String convertToDatabaseColumn(Map<String, Object> attribute) {//The value I'm storing in the database - String value(s)
+		//ObjectMapper here
 		String objectStrToJsonVal = null;
 		try {
-			objectStrToJsonVal = objMapper.writeValueAsString(attribute);//Takes the string and converts it to JSON object
+			objectStrToJsonVal = objMapper.writeValueAsString(attribute);//Takes the string and converts it to my JSON object
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return objectStrToJsonVal;//returns the JSON object
+		return objectStrToJsonVal;//returning my JSON object here
 	}
 
 	@Override
-	public Map<String, Object> convertToEntityAttribute(String dbDataJSON) {//De-serializes the JSON value back to String
+	public Map<String, Object> convertToEntityAttribute(String dbDataJSON) {//De-serializes JSON value back to String
 		Map<String, Object> jsonIntoMapObj = new HashMap<>();
 		if("{}".equals(dbDataJSON) || dbDataJSON == null) {
 			return jsonIntoMapObj;

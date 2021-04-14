@@ -24,7 +24,7 @@ public class FreezePeriodE extends AuditModel{
 	private static final long serialVersionUID = -7455782581657947572L;
 	
 	//create POJO for the Freeze Period object and then inject it into 
-	//the System update policy then set it in Enterprise Service
+	//the System update policy then set it in Enterprise Service - potential solution for issue # 1
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -35,7 +35,7 @@ public class FreezePeriodE extends AuditModel{
 	private Integer endDay;
 	
 	@JsonIgnore
-	@JoinColumn(name = "sys_update_id", nullable = false)
+	@JoinColumn(name = "sys_update_id", nullable = true)
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	private SystemUpdateE systemUpdatePolicyE;
 	
